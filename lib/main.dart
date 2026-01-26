@@ -7,6 +7,7 @@ import 'email_service.dart';
 import 'dart:js_util';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'dart:async';
+import 'dart:html' as html;
 
 // Add this Course class to your existing code
 class Course {
@@ -141,6 +142,22 @@ class _CourseSectionState extends State<CourseSection> {
       heading: 'Introduction to MongoDB',
       description: 'This course has been an incredible experience, helping me deepen my understanding of NoSQL databases, CRUD operations, aggregation frameworks, and more.',
     ),
+    Course(
+  imagePath: 'assets/Research.jpg',
+  heading: 'Research Methodology and Publication',
+  description: 'Participated in a two-day SDP on Research Methodology and Publication, focusing on research design, academic writing, and publication processes',
+), 
+ Course(
+  imagePath: 'assets/Microsoft.jpg',
+  heading: 'Microsoft AI Learning Challenge 2025',
+  description: 'Successfully completed the AINNOVATION 2025 Microsoft AI Learning Challenge, gaining foundational knowledge in Artificial Intelligence and modern AI technologies',
+),
+
+Course(
+  imagePath: 'assets/Flutter.jpg',
+  heading: 'Flutter Workshop',
+  description: 'Completed a 4-day hands-on workshop on Flutter, covering UI development, widgets, and mobile app development fundamentals',
+), 
   ];
 
   @override
@@ -466,6 +483,12 @@ void _launchURL(String url) async {
   }
 }
 
+void _openResume(String url) {
+  // Open resume in a new tab using dart:html
+  html.window.open(url, '_blank');
+}
+
+
   final List<String> technologies = [
     'React', 'JavaScript (ES6+)', 'HTML5 & CSS3', 'Node.js',
     'Git & GitHub', 'MongoDB', 'C programming', 'PHP', 'Java',
@@ -499,13 +522,58 @@ void _launchURL(String url) async {
       codeUrl: 'https://github.com/dhanu-078/tic-tac-toe',
     ),
     Project(
-  title: 'GROCERY SHOPPING WEBSITE',
-  description: 'An online platform for browsing and purchasing groceries with real-time cart, order history, and secure checkout. Optimized for both desktop and mobile users Features intuitive product search, category-based browsing, and a seamless checkout process.',
-  technologies: 'HTML, CSS, JavaScript, MySQL',
-  imagePath: 'assets/grocery_app.png', // Place your image in assets and update the filename if needed
-  demoUrl: 'https://your-grocery-app-demo-link', // Optional: add live demo link if available
-  codeUrl: 'https://github.com/dhanu-078/grocery-shopping-website',
-         ),
+      title: 'GROCERY SHOPPING WEBSITE',
+      description: 'An online platform for browsing and purchasing groceries with real-time cart, order history, and secure checkout. Optimized for both desktop and mobile users Features intuitive product search, category-based browsing, and a seamless checkout process.',
+      technologies: 'HTML, CSS, JavaScript, MySQL',
+      imagePath: 'assets/grocery_app.png',
+      codeUrl: 'https://github.com/dhanu-078/Groceroo-Grocery-Shopping-Website',
+    ),
+    Project(
+      title: 'REAL-TIME CHAT APPLICATION',
+      emoji: '💬',
+      description: 'Developed a full-stack real-time chat application using React, Node.js, Express, and MongoDB, enabling live messaging with secure authentication. Implemented real-time communication and persistent data storage for user messages. Designed a responsive UI for smooth user experience across devices. Integrated WebSocket (Socket.IO) for instant message delivery and real-time updates.',
+      technologies: 'React.js, Vite, HTML5, CSS3, JavaScript (ES6+), Node.js, Express.js, Socket.IO, MongoDB Atlas',
+      imagePath: 'assets/chat_app.png',
+      codeUrl: 'https://github.com/dhanu-078/chat-web-app',
+    ),
+    Project(
+      title: 'FARMER TO STORE CROP SELLING APP',
+      emoji: '💬',
+      description: 'A Flutter mobile application that connects farmers directly with stores to sell their harvested crops efficiently. The app provides an intuitive interface for listing, browsing, and purchasing agricultural produce, improving transparency and reducing intermediaries. Designed to empower farmers with direct market access and streamline crop trade processes.',
+      technologies: 'Flutter, Dart, Firebase Authentication, Firebase Firestore Database, Firebase Storage',
+      imagePath: 'assets/farmer_app.png',
+      codeUrl: 'https://github.com/dhanu-078/Flutter-Farmer-to-Store-Crop-Selling-App-',
+    ),
+    Project(
+      title: 'VACCINATION CENSUS SYSTEM',
+      emoji: '📊',
+      description: 'A web-based vaccination census system developed to collect, manage, and visualize vaccination data efficiently. The application provides interactive dashboards with graphical representations to analyze vaccination coverage and trends. It helps in structured data management and supports better decision-making through data visualization.',
+      technologies: 'React.js, Chart.js, HTML, CSS, JavaScript, Node.js, Express.js, Prisma ORM, MySQL (RDBMS), GitHub',
+      imagePath: 'assets/census_system.png',
+      codeUrl: 'https://github.com/dhanu-078/vaccination-census-system',
+    ),
+    Project(
+      title: 'AI-POWERED CHICKEN WEIGHT ESTIMATION SYSTEM',
+      emoji: '🐔',
+      description: 'An AI-based system designed to estimate the weight of chickens using image processing and machine learning techniques. The application analyzes visual input to predict weight accurately, reducing the need for manual weighing. This system improves efficiency, reduces labor, and supports smart poultry farm management through automated data-driven analysis.',
+      technologies: 'Python, Machine Learning, Computer Vision, OpenCV, TensorFlow / PyTorch, NumPy, Pandas, Image Processing, GitHub',
+      imagePath: 'assets/chicken.png',
+      codeUrl: 'https://github.com/dhanu-078/AI-Powered-Chicken-Weight-Estimation-System',
+    ),
+    Project(
+      title: 'FLUTTER COUNTER APPLICATION',
+      description: 'A simple and intuitive mobile application built using Flutter that demonstrates basic state management and user interaction. The app features responsive UI elements allowing users to increment and decrement a counter value with button taps. It serves as an excellent starter project for learning Flutter fundamentals and understanding widget-based UI construction.',
+      technologies: 'Flutter, Dart',
+      imagePath: 'assets/counter.png',
+      codeUrl: 'https://github.com/dhanu-078/Flutter-Counter-Application',
+    ),
+    Project(
+      title: 'MYRESTAURANT – DIGITAL RESTAURANT MENU WEBSITE',
+      description: 'A responsive and user-friendly restaurant menu website built to showcase food items with images, descriptions, pricing, and an integrated contact form. Users can easily browse the menu, search for dishes, and send inquiries through EmailJS without leaving the page. Designed with clean UI/UX principles, the site works smoothly across devices.',
+      technologies: 'HTML5, CSS3, JavaScript, Bootstrap, jQuery, EmailJS, GitHub',
+      imagePath: 'assets/restaurant.png',
+      codeUrl: 'https://github.com/dhanu-078/MyRestaurant-Digital-Restaurant-Menu-Website',
+    ),
   ];
 
   void scrollToSection(GlobalKey key, String sectionId) {
@@ -513,8 +581,10 @@ void _launchURL(String url) async {
     if (context != null) {
       Scrollable.ensureVisible(
         context,
-        duration: Duration(milliseconds: 500),
-        curve: Curves.easeInOut,
+        duration: Duration(milliseconds: 800),
+        curve: Curves.easeInOutCubic,
+        alignment: 0.1, // Position slightly from top for better visibility
+        alignmentPolicy: ScrollPositionAlignmentPolicy.explicit,
       );
       setState(() {
         activeSection = sectionId;
@@ -628,13 +698,27 @@ Widget _buildProjectCard(Project project) {
                 textAlign: TextAlign.center,
               ),
               SizedBox(height: 12),
-              Text(
-                'Technologies used: ${project.technologies}',
-                style: GoogleFonts.outfit(
-                  fontSize: 12,
-                  color: Colors.grey[700],
-                ),
+              RichText(
                 textAlign: TextAlign.center,
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                      text: 'Technologies used: ',
+                      style: GoogleFonts.outfit(
+                        fontSize: 12,
+                        color: Colors.grey[700],
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    TextSpan(
+                      text: project.technologies,
+                      style: GoogleFonts.outfit(
+                        fontSize: 12,
+                        color: Colors.grey[700],
+                      ),
+                    ),
+                  ],
+                ),
               ),
               SizedBox(height: 16),
               Row(
@@ -868,6 +952,9 @@ Widget _buildContactForm() {
         children: [
           CustomScrollView(
             controller: _scrollController,
+            physics: const ClampingScrollPhysics(
+              parent: AlwaysScrollableScrollPhysics(),
+            ),
             slivers: [
               // Home Section
               /*SliverToBoxAdapter(
@@ -987,7 +1074,7 @@ SliverToBoxAdapter(
                         padding: EdgeInsets.all(6),
                         child: ClipOval(
                           child: Image.asset(
-                            'assets/profile.jpg', // ✅ Make sure this path is correct
+                            'assets/profile.png', // ✅ Make sure this path is correct
                             fit: BoxFit.cover,
                             width: 280,
                             height: 280,
@@ -1034,7 +1121,7 @@ SliverToBoxAdapter(
   padding: EdgeInsets.all(5),
   child: ClipOval(
     child: Image.asset(
-      'assets/profile.jpg',
+      'assets/profile.png',
       fit: BoxFit.cover,
     ),
   ),
@@ -1218,7 +1305,17 @@ SliverToBoxAdapter(
                   _linkButton('About Me', _aboutKey, 'about'),
                   _linkButton('Projects', _projectsKey, 'projects'),
                   _linkButton('Contact', _contactKey, 'contact'),
-                  _linkButton('Resume', null, null, 'https://yourdomain.com/Dhananjaya_K_Resume.pdf'),
+                  TextButton(
+                    onPressed: () => _openResume('/resume.pdf'),
+                    child: Text(
+                      'Resume',
+                      style: GoogleFonts.outfit(
+                        color: Colors.white.withOpacity(0.9),
+                        fontSize: 14,
+                        decoration: TextDecoration.none,
+                      ),
+                    ),
+                  ),
                 ],
               ),
               _footerSection(
@@ -1407,7 +1504,7 @@ label: Text(
         _buildLinkButton('Projects', _projectsKey, 'projects'),
         _buildLinkButton('Contact', _contactKey, 'contact'),
         TextButton(
-          onPressed: () {}, // Replace with resume download if needed
+          onPressed: () => _openResume('/resume.pdf'),
           child: Text('Resume', style: TextStyle(color: Colors.white.withOpacity(0.9))),
         ),
       ],

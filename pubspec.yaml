@@ -25,13 +25,24 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/profile.jpg
+    - assets/coat_photo.png
+    - assets/profile.png
     - assets/mongodb_course.jpg
     - assets/asyncjavascript.jpg
     - assets/tic_tac_toe.png
     - assets/mealdb_app.png
     - assets/idcard.png
     - assets/grocery_app.png
+    - assets/chat_app.png
+    - assets/farmer_app.png
+    - assets/census_system.png
+    - assets/chicken.png
+    - assets/counter.png
+    - assets/restaurant.png
+    - assets/Research.jpg
+    - assets/Flutter.jpg
+    - assets/Microsoft.jpg
+    
 
   
         
