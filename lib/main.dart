@@ -502,7 +502,8 @@ void _openResume(String url) {
       description: 'A clean and minimal digital ID card application built using Flutter. This project showcases a personal profile with a profile picture, name, role, and contact information.its a great starter project for mobile/web Flutter developers.The app is responsive and optimized for deployment on the web using Flutter web build.',
       technologies: 'Flutter, Dart',
       imagePath: 'assets/idcard.png',
-      codeUrl: 'https://github.com/dhanu-078/flutter-id-card-app',
+      demoUrl: 'https://college-id-card-ecru.vercel.app/',
+      codeUrl: 'https://github.com/dhanu-078/College-ID-Card',
     ),
     Project(
       title: 'DELICIOUS RECIPES',
