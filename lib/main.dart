@@ -140,7 +140,7 @@ class _CourseSectionState extends State<CourseSection> {
     Course(
       imagePath: 'assets/mongodb_course.jpg',
       heading: 'Introduction to MongoDB',
-      description: 'This course has been an incredible experience, helping me deepen my understanding of NoSQL databases, CRUD operations, aggregation frameworks, and more.',
+      description: 'This  has been an incredible experience, helping me deepen my understanding of NoSQL databases, CRUD operations, aggregation frameworks, and more.',
     ),
     Course(
       imagePath: 'assets/Research.jpg',
@@ -521,7 +521,7 @@ class _CourseSectionState extends State<CourseSection> {
       child: Column(
         children: [
           Text(
-            'COURSE',
+            'CERTIFICATIONS',
             style: GoogleFonts.outfit(
               textStyle: TextStyle(
                 fontSize: isDesktop ? 48 : 32,
@@ -709,8 +709,8 @@ void _openResume(String url) {
 
   final List<String> technologies = [
     'React', 'JavaScript (ES6+)', 'HTML5 & CSS3', 'Node.js',
-    'Git & GitHub', 'MongoDB', 'C programming', 'PHP', 'Java',
-    'Python', 'APIs (RESTful, MealDB)', 'Responsive Design', 'Agile Development'
+    'Git & GitHub', 'MongoDB','Firebase','MySQL','SQLite','PHP','Dart','Flutter','Visual Studio Code','C programming', 'PHP', 'Java',
+    'Python', 'APIs (RESTful, MealDB)', 'Responsive Design','CMS','Agile Development'
   ];
 
   final List<Project> projects = [
@@ -1420,7 +1420,7 @@ SliverToBoxAdapter(
       child: Column(
         children: [
           Text(
-            'Projects',
+            'PROJECTS',
             style: GoogleFonts.outfit(
               textStyle: TextStyle(
                 fontSize: MediaQuery.of(context).size.width > 768 ? 36 : 28,
