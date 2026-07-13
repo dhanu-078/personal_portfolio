@@ -133,6 +133,16 @@ class _CourseSectionState extends State<CourseSection> {
 
   final List<Course> courses = [
     Course(
+    imagePath: 'assets/mayonix_internship.jpg',
+  heading: 'Junior Software Engineer Internship',
+  description: 'Completed a software development internship at Mayonix Innovations, contributing to CompanyOS using modern web technologies and collaborative development practices.',
+   ),
+    Course(
+  imagePath: 'assets/accolade_internship.jpg',
+  heading: 'Full Stack Web Development Internship',
+  description: 'Completed a Full Stack Web Development internship, gaining hands-on experience in frontend, backend, databases, and real-world software development.',
+    ),
+    Course(
       imagePath: 'assets/asyncjavascript.jpg',
       heading: 'Async JavaScript',
       description: 'Learned asynchronous programming in JavaScript using callbacks, promises, and async/await',
@@ -1266,36 +1276,31 @@ SliverToBoxAdapter(
                         ),
                       ),
 
-                      // Right Side: Image with Gradient Circle
+                      // Right Side: Squircle Image with Animated Gradient Border
                       Container(
                         width: 280,
                         height: 280,
+                        margin: const EdgeInsets.only(left: 32, top: 40),
                         decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          gradient: LinearGradient(
-                            colors: [
-                              Color(0xFF8B5CF6),
-                              Color(0xFF6366F1),
-                              Color(0xFFEC4899),
-                            ],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                          ),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black12,
-                              blurRadius: 16,
-                              offset: Offset(0, 8),
+                              color: Colors.black.withOpacity(0.08),
+                              blurRadius: 20,
+                              offset: Offset(0, 10),
                             ),
                           ],
                         ),
-                        padding: EdgeInsets.all(6),
-                        child: ClipOval(
-                          child: Image.asset(
-                            'assets/profile.png', // ✅ Make sure this path is correct
-                            fit: BoxFit.cover,
-                            width: 280,
-                            height: 280,
+                        child: AnimatedGradientBorder(
+                          borderWidth: 4.0,
+                          borderRadius: BorderRadius.circular(24),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: Image.asset(
+                              'assets/profile.png', // ✅ Make sure this path is correct
+                              fit: BoxFit.cover,
+                              width: 280,
+                              height: 280,
+                            ),
                           ),
                         ),
                       ),
@@ -1315,35 +1320,31 @@ SliverToBoxAdapter(
                       ),
                       SizedBox(height: 32),
                       Container(
-  width: 200,
-  height: 200,
-  decoration: BoxDecoration(
-    shape: BoxShape.circle,
-    gradient: LinearGradient(
-      colors: [
-        Color(0xFF8B5CF6),
-        Color(0xFF6366F1),
-        Color(0xFFEC4899),
-      ],
-      begin: Alignment.topLeft,
-      end: Alignment.bottomRight,
-    ),
-    boxShadow: [
-      BoxShadow(
-        color: Colors.black12,
-        blurRadius: 12,
-        offset: Offset(0, 6),
-      ),
-    ],
-  ),
-  padding: EdgeInsets.all(5),
-  child: ClipOval(
-    child: Image.asset(
-      'assets/profile.png',
-      fit: BoxFit.cover,
-    ),
-  ),
-),
+                        width: 200,
+                        height: 200,
+                        decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.06),
+                              blurRadius: 15,
+                              offset: Offset(0, 8),
+                            ),
+                          ],
+                        ),
+                        child: AnimatedGradientBorder(
+                          borderWidth: 3.5,
+                          borderRadius: BorderRadius.circular(20),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(16.5),
+                            child: Image.asset(
+                              'assets/profile.png',
+                              fit: BoxFit.cover,
+                              width: 200,
+                              height: 200,
+                            ),
+                          ),
+                        ),
+                      ),
 
                       SizedBox(height: 32),
                       Text(
@@ -1522,6 +1523,7 @@ SliverToBoxAdapter(
                 items: [
                   _linkButton('About Me', _aboutKey, 'about'),
                   _linkButton('Projects', _projectsKey, 'projects'),
+                  _linkButton('Certificates', _courseKey, 'course'),
                   _linkButton('Contact', _contactKey, 'contact'),
                   TextButton(
                     onPressed: () => _openResume('/resume.pdf'),
@@ -1549,7 +1551,7 @@ SliverToBoxAdapter(
                 items: [
                   _socialIcon(FontAwesomeIcons.github, 'https://github.com/dhanu-078'),
                   _socialIcon(FontAwesomeIcons.linkedin, 'https://www.linkedin.com/in/dhananjayak2024/'),
-                  _socialIcon(FontAwesomeIcons.twitter, 'https://twitter.com'),
+                  _socialIcon(FontAwesomeIcons.instagram, 'https://www.instagram.com/dhhananjay_/?hl=en'),
                   _socialIcon(FontAwesomeIcons.envelope, 'mailto:dhananjaydhanu2004@gmail.com'),
                 ],
                 isIcons: true,
@@ -1641,6 +1643,8 @@ SliverToBoxAdapter(
                             SizedBox(width: 32),
                             _buildNavButton('Projects', 'projects', _projectsKey, Icons.work),
                             SizedBox(width: 32),
+                            _buildNavButton('Certificates', 'course', _courseKey, Icons.workspace_premium_rounded),
+                            SizedBox(width: 32),
                             _buildNavButton('Contact', 'contact', _contactKey, Icons.contact_mail),
                           ],
                         )
@@ -1679,6 +1683,7 @@ SliverToBoxAdapter(
             _buildDrawerItem('About', 'about', _aboutKey, Icons.info),
             _buildDrawerItem('Skills', 'skills', _skillsKey, Icons.code),
             _buildDrawerItem('Projects', 'projects', _projectsKey, Icons.work),
+            _buildDrawerItem('Certificates', 'course', _courseKey, Icons.workspace_premium_rounded),
             _buildDrawerItem('Contact', 'contact', _contactKey, Icons.contact_mail),
           ],
         ),
