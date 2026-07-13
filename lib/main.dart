@@ -128,12 +128,12 @@ class CourseSection extends StatefulWidget {
 
 class _CourseSectionState extends State<CourseSection> {
   late PageController _pageController;
-  late Timer _timer;
+  late Timer _autoScrollTimer;
   int _currentPage = 0;
 
   final List<Course> courses = [
     Course(
-      imagePath: 'assets/asyncjavascript.jpg', // Make sure to add these images to your assets
+      imagePath: 'assets/asyncjavascript.jpg',
       heading: 'Async JavaScript',
       description: 'Learned asynchronous programming in JavaScript using callbacks, promises, and async/await',
     ),
@@ -143,221 +143,373 @@ class _CourseSectionState extends State<CourseSection> {
       description: 'This course has been an incredible experience, helping me deepen my understanding of NoSQL databases, CRUD operations, aggregation frameworks, and more.',
     ),
     Course(
-  imagePath: 'assets/Research.jpg',
-  heading: 'Research Methodology and Publication',
-  description: 'Participated in a two-day SDP on Research Methodology and Publication, focusing on research design, academic writing, and publication processes',
-), 
- Course(
-  imagePath: 'assets/Microsoft.jpg',
-  heading: 'Microsoft AI Learning Challenge 2025',
-  description: 'Successfully completed the AINNOVATION 2025 Microsoft AI Learning Challenge, gaining foundational knowledge in Artificial Intelligence and modern AI technologies',
-),
-
-Course(
-  imagePath: 'assets/Flutter.jpg',
-  heading: 'Flutter Workshop',
-  description: 'Completed a 4-day hands-on workshop on Flutter, covering UI development, widgets, and mobile app development fundamentals',
-), 
+      imagePath: 'assets/Research.jpg',
+      heading: 'Research Methodology and Publication',
+      description: 'Participated in a two-day SDP on Research Methodology and Publication, focusing on research design, academic writing, and publication processes',
+    ),
+    Course(
+      imagePath: 'assets/Microsoft.jpg',
+      heading: 'Microsoft AI Learning Challenge 2025',
+      description: 'Successfully completed the AINNOVATION 2025 Microsoft AI Learning Challenge, gaining foundational knowledge in Artificial Intelligence and modern AI technologies',
+    ),
+    Course(
+      imagePath: 'assets/Flutter.jpg',
+      heading: 'Flutter Workshop',
+      description: 'Completed a 4-day hands-on workshop on Flutter, covering UI development, widgets, and mobile app development fundamentals',
+    ),
   ];
 
   @override
   void initState() {
     super.initState();
     _pageController = PageController(
-      viewportFraction: 0.8, // Adjust this value for the desired width of each page
+      viewportFraction: 0.8,
     );
-    
-    // Auto-scroll timer
-    _timer = Timer.periodic(Duration(seconds: 3), (Timer timer) {
-      if (_currentPage < courses.length - 1) {
-        _currentPage++;
-      } else {
-        _currentPage = 0;
-      }
-      
-      if (_pageController.hasClients) {
-        _pageController.animateToPage(
-          _currentPage,
-          duration: Duration(milliseconds: 500),
-          curve: Curves.easeInOut,
-        );
-      }
+    _startAutoScroll();
+  }
+
+  void _startAutoScroll() {
+    _autoScrollTimer = Timer.periodic(const Duration(seconds: 10), (timer) {
+      if (!mounted) return;
+      final nextPage = (_currentPage + 1) % courses.length;
+      _pageController.animateToPage(
+        nextPage,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut,
+      );
     });
   }
 
   @override
   void dispose() {
-    _timer.cancel();
+    _autoScrollTimer.cancel();
     _pageController.dispose();
     super.dispose();
   }
 
-  Widget _buildCourseCard(Course course, bool isDesktop) {
-  return AnimatedGradientBorder(
-    borderWidth: 2.0,
-    borderRadius: BorderRadius.circular(12),
-    child: Container(
-      margin: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-      padding: EdgeInsets.all(isDesktop ? 32 : 16),
-      child: isDesktop 
-        ? Row(
-            children: [
-              // Image section
-              Expanded(
-                flex: 2,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: Image.asset(
-                    course.imagePath,
-                    height: 200,
-                    fit: BoxFit.contain,
-                    errorBuilder: (context, error, stackTrace) {
-                      return Container(
-                        height: 200,
-                        color: Colors.grey[300],
-                        child: Icon(
-                          Icons.image_not_supported,
-                          size: 50,
-                          color: Colors.grey[600],
-                        ),
-                      );
-                    },
-                  ),
-                ),
+  void _showCertificateDialog(BuildContext context, Course course) {
+    showDialog(
+      context: context,
+      barrierColor: Colors.black.withOpacity(0.75),
+      builder: (context) => Dialog(
+        backgroundColor: Colors.transparent,
+        insetPadding: const EdgeInsets.all(24),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.3),
+                blurRadius: 30,
+                offset: const Offset(0, 12),
               ),
-              SizedBox(width: 32),
-              // Content section
-              Expanded(
-                flex: 3,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
+            ],
+          ),
+          constraints: const BoxConstraints(maxWidth: 900, maxHeight: 680),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Header
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 16, 8, 8),
+                child: Row(
                   children: [
-                    ShaderMask(
-                      shaderCallback: (bounds) => LinearGradient(
-                        colors: const [
-                          Color(0xFF000080), // Dark blue
-                          Color(0xFF0000FF), // Blue
-                          Color(0xFF008000), // Green
-                          Color(0xFF006400), // Dark green
-                          Color(0xFFFF0000), // Red
-                          Color(0xFF8B0000), // Dark red
-                        ],
-                      ).createShader(bounds),
+                    Expanded(
                       child: Text(
                         course.heading,
                         style: GoogleFonts.outfit(
-                          fontSize: 24,
                           fontWeight: FontWeight.bold,
-                          color: Colors.white,
+                          fontSize: 18,
+                          color: const Color(0xFF1F2937),
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.close, color: Color(0xFF6B7280)),
+                      onPressed: () => Navigator.of(context).pop(),
+                    ),
+                  ],
+                ),
+              ),
+              const Divider(height: 1, thickness: 1),
+              const SizedBox(height: 12),
+              // Zoomable certificate image
+              Flexible(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                  child: InteractiveViewer(
+                    panEnabled: true,
+                    boundaryMargin: const EdgeInsets.all(20),
+                    minScale: 0.5,
+                    maxScale: 5.0,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: Image.asset(
+                        course.imagePath,
+                        fit: BoxFit.contain,
+                        errorBuilder: (context, error, stackTrace) => Container(
+                          height: 350,
+                          color: Colors.grey[100],
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.image_not_supported_outlined,
+                                  size: 64, color: Colors.grey[400]),
+                              const SizedBox(height: 16),
+                              Text(
+                                'Certificate image not available',
+                                style: GoogleFonts.outfit(color: Colors.grey[500]),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                    SizedBox(height: 16),
-                    Text(
-                      'what I learned :',
-                      style: GoogleFonts.outfit(
-                        fontSize: 16,
-                        color: Color(0xFF333333),
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    SizedBox(height: 8),
-                    Text(
-                      course.description,
-                      style: GoogleFonts.outfit(
-                        fontSize: 14,
-                        color: Color(0xFF333333),
-                        height: 1.5,
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
               ),
             ],
-          )
-        : SingleChildScrollView( // ADD THIS TO PREVENT OVERFLOW
-            child: Column(
-              mainAxisSize: MainAxisSize.min, // ADD THIS
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildArrowButton({required IconData icon, required VoidCallback? onPressed}) {
+    return MouseRegion(
+      cursor: onPressed != null ? SystemMouseCursors.click : SystemMouseCursors.basic,
+      child: Container(
+        width: 48,
+        height: 48,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: Colors.white,
+          border: Border.all(color: Colors.grey.shade200),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.04),
+              blurRadius: 6,
+              offset: Offset(0, 3),
+            ),
+          ],
+        ),
+        child: IconButton(
+          icon: Icon(icon, color: onPressed != null ? Color(0xFFFF7F50) : Colors.grey.shade400, size: 24),
+          onPressed: onPressed,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCourseCard(Course course, bool isDesktop) {
+    return AnimatedGradientBorder(
+      borderWidth: 2.0,
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+        padding: EdgeInsets.all(isDesktop ? 32 : 16),
+        child: isDesktop 
+          ? Row(
               children: [
-                // Image section for mobile - MAKE IT SMALLER
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: Image.asset(
-                    course.imagePath,
-                    height: 150, // REDUCED from 200 to 150
-                    width: double.infinity,
-                    fit: BoxFit.contain,
-                    errorBuilder: (context, error, stackTrace) {
-                      return Container(
-                        height: 150, // REDUCED from 200 to 150
-                        color: Colors.grey[300],
-                        child: Icon(
-                          Icons.image_not_supported,
-                          size: 40, // REDUCED from 50 to 40
-                          color: Colors.grey[600],
-                        ),
-                      );
-                    },
+                // Image section
+                Expanded(
+                  flex: 2,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: Image.asset(
+                      course.imagePath,
+                      height: 200,
+                      fit: BoxFit.contain,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Container(
+                          height: 200,
+                          color: Colors.grey[300],
+                          child: Icon(
+                            Icons.image_not_supported,
+                            size: 50,
+                            color: Colors.grey[600],
+                          ),
+                        );
+                      },
+                    ),
                   ),
                 ),
-                SizedBox(height: 12), // REDUCED from 16 to 12
-                // Content section for mobile
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min, // ADD THIS
-                  children: [
-                    ShaderMask(
-                      shaderCallback: (bounds) => LinearGradient(
-                        colors: const [
-                          Color(0xFF000080), // Dark blue
-                          Color(0xFF0000FF), // Blue
-                          Color(0xFF008000), // Green
-                          Color(0xFF006400), // Dark green
-                          Color(0xFFFF0000), // Red
-                          Color(0xFF8B0000), // Dark red
-                        ],
-                      ).createShader(bounds),
-                      child: Text(
-                        course.heading,
-                        style: GoogleFonts.outfit(
-                          fontSize: 16, // REDUCED from 18 to 16
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
+                SizedBox(width: 32),
+                // Content section
+                Expanded(
+                  flex: 3,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ShaderMask(
+                        shaderCallback: (bounds) => LinearGradient(
+                          colors: const [
+                            Color(0xFF000080), // Dark blue
+                            Color(0xFF0000FF), // Blue
+                            Color(0xFF008000), // Green
+                            Color(0xFF006400), // Dark green
+                            Color(0xFFFF0000), // Red
+                            Color(0xFF8B0000), // Dark red
+                          ],
+                        ).createShader(bounds),
+                        child: Text(
+                          course.heading,
+                          style: GoogleFonts.outfit(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
                         ),
-                        textAlign: TextAlign.center,
-                        maxLines: 2, // ADD THIS TO LIMIT LINES
-                        overflow: TextOverflow.ellipsis, // ADD THIS
                       ),
-                    ),
-                    SizedBox(height: 8), // REDUCED from 12 to 8
-                    Text(
-                      'what I learned :',
-                      style: GoogleFonts.outfit(
-                        fontSize: 14, // RESTORED to original size
-                        color: Color(0xFF333333),
-                        fontWeight: FontWeight.w500,
+                      SizedBox(height: 16),
+                      Text(
+                        'what I learned :',
+                        style: GoogleFonts.outfit(
+                          fontSize: 16,
+                          color: Color(0xFF333333),
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 6), // REDUCED from 8 to 6
-                    Text(
-                      course.description,
-                      style: GoogleFonts.outfit(
-                        fontSize: 12, // RESTORED to original size
-                        color: Color(0xFF333333),
-                        height: 1.5, // RESTORED to original line height
+                      SizedBox(height: 8),
+                      Text(
+                        course.description,
+                        style: GoogleFonts.outfit(
+                          fontSize: 14,
+                          color: Color(0xFF333333),
+                          height: 1.5,
+                        ),
                       ),
-                      textAlign: TextAlign.center,
-                      // REMOVED maxLines and overflow to allow full text display
-                    ),
-                  ],
+                      SizedBox(height: 20),
+                      ElevatedButton.icon(
+                        onPressed: () => _showCertificateDialog(context, course),
+                        icon: const Icon(Icons.workspace_premium_rounded, size: 22, color: Colors.white),
+                        label: Text(
+                          'View Certificate',
+                          style: GoogleFonts.outfit(
+                            fontWeight: FontWeight.w700,
+                            fontSize: 17,
+                            color: Colors.white,
+                          ),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFFFF7F50),
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          elevation: 4,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ],
+            )
+          : SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: Image.asset(
+                      course.imagePath,
+                      height: 150,
+                      width: double.infinity,
+                      fit: BoxFit.contain,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Container(
+                          height: 150,
+                          color: Colors.grey[300],
+                          child: Icon(
+                            Icons.image_not_supported,
+                            size: 40,
+                            color: Colors.grey[600],
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  SizedBox(height: 12),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      ShaderMask(
+                        shaderCallback: (bounds) => LinearGradient(
+                          colors: const [
+                            Color(0xFF000080), // Dark blue
+                            Color(0xFF0000FF), // Blue
+                            Color(0xFF008000), // Green
+                            Color(0xFF006400), // Dark green
+                            Color(0xFFFF0000), // Red
+                            Color(0xFF8B0000), // Dark red
+                          ],
+                        ).createShader(bounds),
+                        child: Text(
+                          course.heading,
+                          style: GoogleFonts.outfit(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                          textAlign: TextAlign.center,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      SizedBox(height: 8),
+                      Text(
+                        'what I learned :',
+                        style: GoogleFonts.outfit(
+                          fontSize: 14,
+                          color: Color(0xFF333333),
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      SizedBox(height: 6),
+                      Text(
+                        course.description,
+                        style: GoogleFonts.outfit(
+                          fontSize: 12,
+                          color: Color(0xFF333333),
+                          height: 1.5,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      SizedBox(height: 14),
+                      ElevatedButton.icon(
+                        onPressed: () => _showCertificateDialog(context, course),
+                        icon: const Icon(Icons.workspace_premium_rounded, size: 18, color: Colors.white),
+                        label: Text(
+                          'View Certificate',
+                          style: GoogleFonts.outfit(
+                            fontWeight: FontWeight.w700,
+                            fontSize: 15,
+                            color: Colors.white,
+                          ),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFFFF7F50),
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 18),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          elevation: 3,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ),
-    ),
-  );
-}
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -368,7 +520,6 @@ Course(
       padding: EdgeInsets.symmetric(vertical: 80, horizontal: 16),
       child: Column(
         children: [
-          // Course title
           Text(
             'COURSE',
             style: GoogleFonts.outfit(
@@ -383,41 +534,106 @@ Course(
           ),
           SizedBox(height: 48),
           
-          // Course carousel
-          SizedBox(
-            height: isDesktop ? 300 : 400,
-            child: PageView.builder(
-              controller: _pageController,
-              onPageChanged: (int page) {
-                setState(() {
-                  _currentPage = page;
-                });
-              },
-              itemCount: courses.length,
-              itemBuilder: (context, index) {
-                return _buildCourseCard(courses[index], isDesktop);
-              },
-            ),
-          ),
-          
-          // Page indicators
-          SizedBox(height: 20),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: List.generate(
-              courses.length,
-              (index) => Container(
-                margin: EdgeInsets.symmetric(horizontal: 4),
-                width: _currentPage == index ? 12 : 8,
-                height: _currentPage == index ? 12 : 8,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: _currentPage == index 
-                    ? Color(0xFFFF7F50) 
-                    : Color(0xFFFF7F50).withOpacity(0.3),
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              if (isDesktop) ...[
+                _buildArrowButton(
+                  icon: Icons.chevron_left,
+                  onPressed: _currentPage > 0 ? () {
+                    _pageController.previousPage(
+                      duration: Duration(milliseconds: 300),
+                      curve: Curves.easeInOut,
+                    );
+                  } : null,
+                ),
+                SizedBox(width: 16),
+              ],
+              
+              Expanded(
+                child: SizedBox(
+                  height: isDesktop ? 340 : 460,
+                  child: PageView.builder(
+                    controller: _pageController,
+                    onPageChanged: (int page) {
+                      setState(() {
+                        _currentPage = page;
+                      });
+                    },
+                    itemCount: courses.length,
+                    itemBuilder: (context, index) {
+                      return _buildCourseCard(courses[index], isDesktop);
+                    },
+                  ),
                 ),
               ),
-            ),
+              
+              if (isDesktop) ...[
+                SizedBox(width: 16),
+                _buildArrowButton(
+                  icon: Icons.chevron_right,
+                  onPressed: _currentPage < courses.length - 1 ? () {
+                    _pageController.nextPage(
+                      duration: Duration(milliseconds: 300),
+                      curve: Curves.easeInOut,
+                    );
+                  } : null,
+                ),
+              ],
+            ],
+          ),
+          
+          SizedBox(height: 32),
+          
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              if (!isDesktop) ...[
+                _buildArrowButton(
+                  icon: Icons.chevron_left,
+                  onPressed: _currentPage > 0 ? () {
+                    _pageController.previousPage(
+                      duration: Duration(milliseconds: 300),
+                      curve: Curves.easeInOut,
+                    );
+                  } : null,
+                ),
+                SizedBox(width: 24),
+              ],
+              
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(
+                  courses.length,
+                  (index) => Container(
+                    margin: EdgeInsets.symmetric(horizontal: 4),
+                    width: _currentPage == index ? 12 : 8,
+                    height: _currentPage == index ? 12 : 8,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: _currentPage == index 
+                        ? Color(0xFFFF7F50) 
+                        : Color(0xFFFF7F50).withOpacity(0.3),
+                    ),
+                  ),
+                ),
+              ),
+              
+              if (!isDesktop) ...[
+                SizedBox(width: 24),
+                _buildArrowButton(
+                  icon: Icons.chevron_right,
+                  onPressed: _currentPage < courses.length - 1 ? () {
+                    _pageController.nextPage(
+                      duration: Duration(milliseconds: 300),
+                      curve: Curves.easeInOut,
+                    );
+                  } : null,
+                ),
+              ],
+            ],
           ),
         ],
       ),
@@ -430,6 +646,8 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
