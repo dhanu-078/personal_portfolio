@@ -694,6 +694,7 @@ class _PortfolioPageState extends State<PortfolioPage> {
   final TextEditingController _messageController = TextEditingController();
   
   String activeSection = 'home';
+  bool _showAllProjects = false;
   
   // Global keys for sections
   final GlobalKey _aboutKey = GlobalKey();
@@ -719,55 +720,38 @@ void _openResume(String url) {
 
   final List<String> technologies = [
     'React', 'JavaScript (ES6+)', 'HTML5 & CSS3', 'Node.js',
-    'Git & GitHub', 'MongoDB','Firebase','MySQL','SQLite','PHP','Dart','Flutter','Visual Studio Code','C programming', 'PHP', 'Java',
-    'Python', 'APIs (RESTful, MealDB)', 'Responsive Design','CMS','Agile Development'
+    'Git & GitHub', 'MongoDB','Firebase','MySQL','SQLite','PHP','Dart','Flutter','Visual Studio Code','C programming','Java',
+    'Python', 'APIs (RESTful, MealDB)','Next.js','Express.js','Responsive Design','Strapi CMS','Agile Development'
   ];
 
   final List<Project> projects = [
     Project(
-      title: 'ID CARD APP',
-      emoji: '🚀',
-      description: 'A clean and minimal digital ID card application built using Flutter. This project showcases a personal profile with a profile picture, name, role, and contact information.its a great starter project for mobile/web Flutter developers.The app is responsive and optimized for deployment on the web using Flutter web build.',
-      technologies: 'Flutter, Dart',
-      imagePath: 'assets/idcard.png',
-      demoUrl: 'https://college-id-card-ecru.vercel.app/',
-      codeUrl: 'https://github.com/dhanu-078/College-ID-Card',
-    ),
-    Project(
-      title: 'DELICIOUS RECIPES',
-      description: 'Delicious Recipes - A recipe website that helps users discover, search, and explore a variety of dishes from around the world. Features include smart search, detailed meal information, and easy-to-follow instructions for every level of cook.',
-      technologies: 'React, React Router, CSS, TheMealDB API, Vite, Git and GitHub, Deployment Platform : Vercel',
-      imagePath: 'assets/mealdb_app.png',
-      demoUrl: 'https://mealdb-recipe-app.vercel.app/',
-      codeUrl: 'https://github.com/dhanu-078/mealdb-recipe-app',
-    ),
-    Project(
-      title: 'TIC-TAC-TOE GAME',
-      description: 'Tic-Tac-Toe Game - A simple, interactive Tic-Tac-Toe game built using HTML, CSS, and JavaScript. Players take turns marking a 3x3 grid, aiming to get three marks in a row. The app tracks the game state, declares a winner, and allows for multiple rounds. It\'s a fun way to showcase my skills in building interactive web applications.',
-      technologies: 'HTML, CSS, JavaScript',
-      imagePath: 'assets/tic_tac_toe.png',
-      demoUrl: 'https://dhanu-078.github.io/tic-tac-toe/',
-      codeUrl: 'https://github.com/dhanu-078/tic-tac-toe',
-    ),
-    Project(
-      title: 'GROCERY SHOPPING WEBSITE',
-      description: 'An online platform for browsing and purchasing groceries with real-time cart, order history, and secure checkout. Optimized for both desktop and mobile users Features intuitive product search, category-based browsing, and a seamless checkout process.',
-      technologies: 'HTML, CSS, JavaScript, MySQL',
-      imagePath: 'assets/grocery_app.png',
-      codeUrl: 'https://github.com/dhanu-078/Groceroo-Grocery-Shopping-Website',
+      title: 'AI-POWERED CHICKEN WEIGHT ESTIMATION SYSTEM',
+      emoji: '🐔',
+      description: 'AI-based system designed to estimate the weight of chickens using image processing and machine learning techniques. The application analyzes visual input to predict weight accurately, reducing the need for manual weighing. Supports automated monitoring and data-driven decision-making to enhance productivity in poultry farming.',
+      technologies: 'Python, Machine Learning, Computer Vision, OpenCV, TensorFlow / PyTorch, NumPy, Pandas, Image Processing, GitHub',
+      imagePath: 'assets/chicken.png',
+      codeUrl: 'https://github.com/dhanu-078/AI-Powered-Chicken-Weight-Estimation-System',
     ),
     Project(
       title: 'REAL-TIME CHAT APPLICATION',
       emoji: '💬',
-      description: 'Developed a full-stack real-time chat application using React, Node.js, Express, and MongoDB, enabling live messaging with secure authentication. Implemented real-time communication and persistent data storage for user messages. Designed a responsive UI for smooth user experience across devices. Integrated WebSocket (Socket.IO) for instant message delivery and real-time updates.',
+      description: 'Developed a full-stack real-time chat application using React, Node.js, Express, and MongoDB, enabling live messaging with secure authentication. Implemented real-time communication and persistent data storage for user messages. Integrated WebSocket (Socket.IO) for instant message delivery and real-time updates.',
       technologies: 'React.js, Vite, HTML5, CSS3, JavaScript (ES6+), Node.js, Express.js, Socket.IO, MongoDB Atlas',
       imagePath: 'assets/chat_app.png',
       codeUrl: 'https://github.com/dhanu-078/chat-web-app',
     ),
     Project(
+      title: 'GROCERY SHOPPING WEBSITE',
+      description: 'An online platform for browsing and purchasing groceries with real-time cart, order history, and secure checkout. Optimized for both desktop and mobile users. Features intuitive product search, category-based browsing, and a seamless checkout process. Integrated secure user authentication and efficient order management for an enhanced shopping experience.',
+      technologies: 'HTML, CSS, JavaScript, MySQL',
+      imagePath: 'assets/grocery_app.png',
+      codeUrl: 'https://github.com/dhanu-078/Groceroo-Grocery-Shopping-Website',
+    ),
+    Project(
       title: 'FARMER TO STORE CROP SELLING APP',
       emoji: '💬',
-      description: 'A Flutter mobile application that connects farmers directly with stores to sell their harvested crops efficiently. The app provides an intuitive interface for listing, browsing, and purchasing agricultural produce, improving transparency and reducing intermediaries. Designed to empower farmers with direct market access and streamline crop trade processes.',
+      description: 'A Flutter mobile application that connects farmers directly with stores to sell their harvested crops efficiently. The app provides an intuitive interface for listing, browsing, and purchasing agricultural produce, improving transparency and reducing intermediaries. Designed to empower farmers with direct market access and crop trade processes.',
       technologies: 'Flutter, Dart, Firebase Authentication, Firebase Firestore Database, Firebase Storage',
       imagePath: 'assets/farmer_app.png',
       codeUrl: 'https://github.com/dhanu-078/Flutter-Farmer-to-Store-Crop-Selling-App-',
@@ -781,12 +765,29 @@ void _openResume(String url) {
       codeUrl: 'https://github.com/dhanu-078/vaccination-census-system',
     ),
     Project(
-      title: 'AI-POWERED CHICKEN WEIGHT ESTIMATION SYSTEM',
-      emoji: '🐔',
-      description: 'An AI-based system designed to estimate the weight of chickens using image processing and machine learning techniques. The application analyzes visual input to predict weight accurately, reducing the need for manual weighing. This system improves efficiency, reduces labor, and supports smart poultry farm management through automated data-driven analysis.',
-      technologies: 'Python, Machine Learning, Computer Vision, OpenCV, TensorFlow / PyTorch, NumPy, Pandas, Image Processing, GitHub',
-      imagePath: 'assets/chicken.png',
-      codeUrl: 'https://github.com/dhanu-078/AI-Powered-Chicken-Weight-Estimation-System',
+      title: 'DELICIOUS RECIPES',
+      description: 'Delicious Recipes – A recipe website that helps users discover, search, and explore a variety of dishes from around the world. Features include smart search, detailed meal information, and easy-to-follow instructions for every level of cook. Provides a responsive and intuitive interface, allowing users to quickly find recipes based on ingredients, categories, or cuisine.',
+      technologies: 'React, React Router, CSS, TheMealDB API, Vite, Git and GitHub, Deployment Platform : Vercel',
+      imagePath: 'assets/mealdb_app.png',
+      demoUrl: 'https://mealdb-recipe-app.vercel.app/',
+      codeUrl: 'https://github.com/dhanu-078/mealdb-recipe-app',
+    ),
+    Project(
+      title: 'ID CARD APP',
+      emoji: '🚀',
+      description: 'A clean and minimal digital ID card application built using Flutter. This project showcases a personal profile with a profile picture, name, role, and contact information.its a great starter project for mobile/web Flutter developers.The app is responsive and optimized for deployment on the web using Flutter web build.',
+      technologies: 'Flutter, Dart',
+      imagePath: 'assets/idcard.png',
+      demoUrl: 'https://college-id-card-ecru.vercel.app/',
+      codeUrl: 'https://github.com/dhanu-078/College-ID-Card',
+    ),
+    Project(
+      title: 'TIC-TAC-TOE GAME',
+      description: 'Tic-Tac-Toe Game - A simple, interactive Tic-Tac-Toe game built using HTML, CSS, and JavaScript. Players take turns marking a 3x3 grid, aiming to get three marks in a row. The app tracks the game state, declares a winner, and allows for multiple rounds. It\'s a fun way to showcase my skills in building interactive web applications.',
+      technologies: 'HTML, CSS, JavaScript',
+      imagePath: 'assets/tic_tac_toe.png',
+      demoUrl: 'https://dhanu-078.github.io/tic-tac-toe/',
+      codeUrl: 'https://github.com/dhanu-078/tic-tac-toe',
     ),
     Project(
       title: 'FLUTTER COUNTER APPLICATION',
@@ -880,6 +881,7 @@ Widget _buildProjectCard(Project project) {
         ),
         padding: EdgeInsets.all(1.5), // Gradient border
         child: Container(
+          height: 600, // Fixed height to make all cards equal size
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(10),
@@ -916,36 +918,45 @@ Widget _buildProjectCard(Project project) {
                 textAlign: TextAlign.center,
               ),
               SizedBox(height: 12),
-              Text(
-                project.description,
-                style: GoogleFonts.outfit(
-                  fontSize: 14,
-                  color: Color(0xFF333333),
-                  height: 1.5,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(height: 12),
-              RichText(
-                textAlign: TextAlign.center,
-                text: TextSpan(
-                  children: [
-                    TextSpan(
-                      text: 'Technologies used: ',
-                      style: GoogleFonts.outfit(
-                        fontSize: 12,
-                        color: Colors.grey[700],
-                        fontWeight: FontWeight.bold,
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Text(
+                        project.description,
+                        style: GoogleFonts.outfit(
+                          fontSize: 14,
+                          color: Color(0xFF333333),
+                          height: 1.5,
+                        ),
+                        textAlign: TextAlign.center,
                       ),
-                    ),
-                    TextSpan(
-                      text: project.technologies,
-                      style: GoogleFonts.outfit(
-                        fontSize: 12,
-                        color: Colors.grey[700],
+                      SizedBox(height: 12),
+                      RichText(
+                        textAlign: TextAlign.center,
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text: 'Technologies used: ',
+                              style: GoogleFonts.outfit(
+                                fontSize: 12,
+                                color: Colors.grey[800],
+                                fontWeight: FontWeight.bold, // Bold label
+                              ),
+                            ),
+                            TextSpan(
+                              text: project.technologies,
+                              style: GoogleFonts.outfit(
+                                fontSize: 12,
+                                color: Color(0xFFFF7F50), // Main coral/orange accent color
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
               SizedBox(height: 16),
@@ -1433,13 +1444,44 @@ SliverToBoxAdapter(
             textAlign: TextAlign.center,
           ),
           SizedBox(height: 48),
-          Wrap(
-            spacing: 20,
-            runSpacing: 20,
-            alignment: WrapAlignment.center,
-            children: projects.map((project) {
-              return _buildProjectCard(project);
-            }).toList(),
+          AnimatedSize(
+            duration: const Duration(milliseconds: 350),
+            curve: Curves.easeInOut,
+            child: Wrap(
+              spacing: 20,
+              runSpacing: 20,
+              alignment: WrapAlignment.center,
+              children: (_showAllProjects ? projects : projects.sublist(0, 6)).map((project) {
+                return _buildProjectCard(project);
+              }).toList(),
+            ),
+          ),
+          SizedBox(height: 40),
+          OutlinedButton.icon(
+            onPressed: () {
+              setState(() {
+                _showAllProjects = !_showAllProjects;
+              });
+            },
+            icon: Icon(
+              _showAllProjects ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
+              color: Color(0xFFFF7F50),
+            ),
+            label: Text(
+              _showAllProjects ? 'Show Less' : 'More Projects',
+              style: GoogleFonts.outfit(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFFFF7F50),
+              ),
+            ),
+            style: OutlinedButton.styleFrom(
+              side: BorderSide(color: Color(0xFFFF7F50), width: 2),
+              padding: EdgeInsets.symmetric(horizontal: 28, vertical: 14),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30),
+              ),
+            ),
           ),
         ],
       ),
