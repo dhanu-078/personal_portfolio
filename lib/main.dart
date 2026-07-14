@@ -259,6 +259,8 @@ class _CourseSectionState extends State<CourseSection> {
                       child: Image.asset(
                         course.imagePath,
                         fit: BoxFit.contain,
+                        filterQuality: FilterQuality.high,
+                        isAntiAlias: true,
                         errorBuilder: (context, error, stackTrace) => Container(
                           height: 350,
                           color: Colors.grey[100],
@@ -332,6 +334,8 @@ class _CourseSectionState extends State<CourseSection> {
                       course.imagePath,
                       height: 200,
                       fit: BoxFit.contain,
+                      filterQuality: FilterQuality.high,
+                      isAntiAlias: true,
                       errorBuilder: (context, error, stackTrace) {
                         return Container(
                           height: 200,
@@ -713,8 +717,10 @@ void _launchURL(String url) async {
 }
 
 void _openResume(String url) {
-  // Open resume in a new tab using dart:html
-  html.window.open(url, '_blank');
+  // Force download the resume using an anchor element with the download attribute
+  final anchor = html.AnchorElement(href: url)
+    ..setAttribute('download', 'Dhananjay_Resume.pdf')
+    ..click();
 }
 
 
@@ -772,6 +778,13 @@ void _openResume(String url) {
       demoUrl: 'https://mealdb-recipe-app.vercel.app/',
       codeUrl: 'https://github.com/dhanu-078/mealdb-recipe-app',
     ),
+    Project(
+      title: 'MAYONIX INNOVATIONS',
+      description: 'Mayonix Innovations – A modern, AI-focused corporate website showcasing the company’s services, portfolio, blogs, and career opportunities. Contributed to implementing multilingual localization, SEO enhancements, CMS integration, responsive UI improvements, dynamic blog management, and performance optimizations to deliver a scalable and user-friendly web experience.',
+      technologies:  'Next.js, React.js, TypeScript, Strapi CMS, Node.js, PostgreSQL, SQLite, Redis, Tailwind CSS, HTML5, CSS3, REST APIs, Cloudflare Turnstile, Cloudinary, Brevo',
+      imagePath: 'assets/mayonix.png',
+      demoUrl: 'https://www.mayonix.com/',
+),
     Project(
       title: 'ID CARD APP',
       emoji: '🚀',
@@ -905,6 +918,8 @@ Widget _buildProjectCard(Project project) {
                     height: 180,
                     width: double.infinity,
                     fit: BoxFit.cover,
+                    filterQuality: FilterQuality.high,
+                    isAntiAlias: true,
                   ),
                 ),
               SizedBox(height: 20),
@@ -1451,7 +1466,7 @@ SliverToBoxAdapter(
               spacing: 20,
               runSpacing: 20,
               alignment: WrapAlignment.center,
-              children: (_showAllProjects ? projects : projects.sublist(0, 6)).map((project) {
+              children: (_showAllProjects ? projects : projects.sublist(0, 7)).map((project) {
                 return _buildProjectCard(project);
               }).toList(),
             ),
