@@ -128,236 +128,402 @@ class CourseSection extends StatefulWidget {
 
 class _CourseSectionState extends State<CourseSection> {
   late PageController _pageController;
-  late Timer _timer;
+  late Timer _autoScrollTimer;
   int _currentPage = 0;
 
   final List<Course> courses = [
     Course(
-      imagePath: 'assets/asyncjavascript.jpg', // Make sure to add these images to your assets
+    imagePath: 'assets/mayonix_internship.jpg',
+  heading: 'Junior Software Engineer Internship',
+  description: 'Completed a software development internship at Mayonix Innovations, contributing to CompanyOS using modern web technologies and collaborative development practices.',
+   ),
+    Course(
+  imagePath: 'assets/accolade_internship.jpg',
+  heading: 'Full Stack Web Development Internship',
+  description: 'Completed a Full Stack Web Development internship, gaining hands-on experience in frontend, backend, databases, and real-world software development.',
+    ),
+    Course(
+      imagePath: 'assets/asyncjavascript.jpg',
       heading: 'Async JavaScript',
       description: 'Learned asynchronous programming in JavaScript using callbacks, promises, and async/await',
     ),
     Course(
       imagePath: 'assets/mongodb_course.jpg',
       heading: 'Introduction to MongoDB',
-      description: 'This course has been an incredible experience, helping me deepen my understanding of NoSQL databases, CRUD operations, aggregation frameworks, and more.',
+      description: 'This  has been an incredible experience, helping me deepen my understanding of NoSQL databases, CRUD operations, aggregation frameworks, and more.',
     ),
     Course(
-  imagePath: 'assets/Research.jpg',
-  heading: 'Research Methodology and Publication',
-  description: 'Participated in a two-day SDP on Research Methodology and Publication, focusing on research design, academic writing, and publication processes',
-), 
- Course(
-  imagePath: 'assets/Microsoft.jpg',
-  heading: 'Microsoft AI Learning Challenge 2025',
-  description: 'Successfully completed the AINNOVATION 2025 Microsoft AI Learning Challenge, gaining foundational knowledge in Artificial Intelligence and modern AI technologies',
-),
-
-Course(
-  imagePath: 'assets/Flutter.jpg',
-  heading: 'Flutter Workshop',
-  description: 'Completed a 4-day hands-on workshop on Flutter, covering UI development, widgets, and mobile app development fundamentals',
-), 
+      imagePath: 'assets/Research.jpg',
+      heading: 'Research Methodology and Publication',
+      description: 'Participated in a two-day SDP on Research Methodology and Publication, focusing on research design, academic writing, and publication processes',
+    ),
+    Course(
+      imagePath: 'assets/Microsoft.jpg',
+      heading: 'Microsoft AI Learning Challenge 2025',
+      description: 'Successfully completed the AINNOVATION 2025 Microsoft AI Learning Challenge, gaining foundational knowledge in Artificial Intelligence and modern AI technologies',
+    ),
+    Course(
+      imagePath: 'assets/Flutter.jpg',
+      heading: 'Flutter Workshop',
+      description: 'Completed a 4-day hands-on workshop on Flutter, covering UI development, widgets, and mobile app development fundamentals',
+    ),
   ];
 
   @override
   void initState() {
     super.initState();
     _pageController = PageController(
-      viewportFraction: 0.8, // Adjust this value for the desired width of each page
+      viewportFraction: 0.8,
     );
-    
-    // Auto-scroll timer
-    _timer = Timer.periodic(Duration(seconds: 3), (Timer timer) {
-      if (_currentPage < courses.length - 1) {
-        _currentPage++;
-      } else {
-        _currentPage = 0;
-      }
-      
-      if (_pageController.hasClients) {
-        _pageController.animateToPage(
-          _currentPage,
-          duration: Duration(milliseconds: 500),
-          curve: Curves.easeInOut,
-        );
-      }
+    _startAutoScroll();
+  }
+
+  void _startAutoScroll() {
+    _autoScrollTimer = Timer.periodic(const Duration(seconds: 10), (timer) {
+      if (!mounted) return;
+      final nextPage = (_currentPage + 1) % courses.length;
+      _pageController.animateToPage(
+        nextPage,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut,
+      );
     });
   }
 
   @override
   void dispose() {
-    _timer.cancel();
+    _autoScrollTimer.cancel();
     _pageController.dispose();
     super.dispose();
   }
 
-  Widget _buildCourseCard(Course course, bool isDesktop) {
-  return AnimatedGradientBorder(
-    borderWidth: 2.0,
-    borderRadius: BorderRadius.circular(12),
-    child: Container(
-      margin: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-      padding: EdgeInsets.all(isDesktop ? 32 : 16),
-      child: isDesktop 
-        ? Row(
-            children: [
-              // Image section
-              Expanded(
-                flex: 2,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: Image.asset(
-                    course.imagePath,
-                    height: 200,
-                    fit: BoxFit.contain,
-                    errorBuilder: (context, error, stackTrace) {
-                      return Container(
-                        height: 200,
-                        color: Colors.grey[300],
-                        child: Icon(
-                          Icons.image_not_supported,
-                          size: 50,
-                          color: Colors.grey[600],
-                        ),
-                      );
-                    },
-                  ),
-                ),
+  void _showCertificateDialog(BuildContext context, Course course) {
+    showDialog(
+      context: context,
+      barrierColor: Colors.black.withOpacity(0.75),
+      builder: (context) => Dialog(
+        backgroundColor: Colors.transparent,
+        insetPadding: const EdgeInsets.all(24),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.3),
+                blurRadius: 30,
+                offset: const Offset(0, 12),
               ),
-              SizedBox(width: 32),
-              // Content section
-              Expanded(
-                flex: 3,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
+            ],
+          ),
+          constraints: const BoxConstraints(maxWidth: 900, maxHeight: 680),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Header
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 16, 8, 8),
+                child: Row(
                   children: [
-                    ShaderMask(
-                      shaderCallback: (bounds) => LinearGradient(
-                        colors: const [
-                          Color(0xFF000080), // Dark blue
-                          Color(0xFF0000FF), // Blue
-                          Color(0xFF008000), // Green
-                          Color(0xFF006400), // Dark green
-                          Color(0xFFFF0000), // Red
-                          Color(0xFF8B0000), // Dark red
-                        ],
-                      ).createShader(bounds),
+                    Expanded(
                       child: Text(
                         course.heading,
                         style: GoogleFonts.outfit(
-                          fontSize: 24,
                           fontWeight: FontWeight.bold,
-                          color: Colors.white,
+                          fontSize: 18,
+                          color: const Color(0xFF1F2937),
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.close, color: Color(0xFF6B7280)),
+                      onPressed: () => Navigator.of(context).pop(),
+                    ),
+                  ],
+                ),
+              ),
+              const Divider(height: 1, thickness: 1),
+              const SizedBox(height: 12),
+              // Zoomable certificate image
+              Flexible(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                  child: InteractiveViewer(
+                    panEnabled: true,
+                    boundaryMargin: const EdgeInsets.all(20),
+                    minScale: 0.5,
+                    maxScale: 5.0,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: Image.asset(
+                        course.imagePath,
+                        fit: BoxFit.contain,
+                        filterQuality: FilterQuality.high,
+                        isAntiAlias: true,
+                        errorBuilder: (context, error, stackTrace) => Container(
+                          height: 350,
+                          color: Colors.grey[100],
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.image_not_supported_outlined,
+                                  size: 64, color: Colors.grey[400]),
+                              const SizedBox(height: 16),
+                              Text(
+                                'Certificate image not available',
+                                style: GoogleFonts.outfit(color: Colors.grey[500]),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                    SizedBox(height: 16),
-                    Text(
-                      'what I learned :',
-                      style: GoogleFonts.outfit(
-                        fontSize: 16,
-                        color: Color(0xFF333333),
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    SizedBox(height: 8),
-                    Text(
-                      course.description,
-                      style: GoogleFonts.outfit(
-                        fontSize: 14,
-                        color: Color(0xFF333333),
-                        height: 1.5,
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
               ),
             ],
-          )
-        : SingleChildScrollView( // ADD THIS TO PREVENT OVERFLOW
-            child: Column(
-              mainAxisSize: MainAxisSize.min, // ADD THIS
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildArrowButton({required IconData icon, required VoidCallback? onPressed}) {
+    return MouseRegion(
+      cursor: onPressed != null ? SystemMouseCursors.click : SystemMouseCursors.basic,
+      child: Container(
+        width: 48,
+        height: 48,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: Colors.white,
+          border: Border.all(color: Colors.grey.shade200),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.04),
+              blurRadius: 6,
+              offset: Offset(0, 3),
+            ),
+          ],
+        ),
+        child: IconButton(
+          icon: Icon(icon, color: onPressed != null ? Color(0xFFFF7F50) : Colors.grey.shade400, size: 24),
+          onPressed: onPressed,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCourseCard(Course course, bool isDesktop) {
+    return AnimatedGradientBorder(
+      borderWidth: 2.0,
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+        padding: EdgeInsets.all(isDesktop ? 32 : 16),
+        child: isDesktop 
+          ? Row(
               children: [
-                // Image section for mobile - MAKE IT SMALLER
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: Image.asset(
-                    course.imagePath,
-                    height: 150, // REDUCED from 200 to 150
-                    width: double.infinity,
-                    fit: BoxFit.contain,
-                    errorBuilder: (context, error, stackTrace) {
-                      return Container(
-                        height: 150, // REDUCED from 200 to 150
-                        color: Colors.grey[300],
-                        child: Icon(
-                          Icons.image_not_supported,
-                          size: 40, // REDUCED from 50 to 40
-                          color: Colors.grey[600],
-                        ),
-                      );
-                    },
+                // Image section
+                Expanded(
+                  flex: 2,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: Image.asset(
+                      course.imagePath,
+                      height: 200,
+                      fit: BoxFit.contain,
+                      filterQuality: FilterQuality.high,
+                      isAntiAlias: true,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Container(
+                          height: 200,
+                          color: Colors.grey[300],
+                          child: Icon(
+                            Icons.image_not_supported,
+                            size: 50,
+                            color: Colors.grey[600],
+                          ),
+                        );
+                      },
+                    ),
                   ),
                 ),
-                SizedBox(height: 12), // REDUCED from 16 to 12
-                // Content section for mobile
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min, // ADD THIS
-                  children: [
-                    ShaderMask(
-                      shaderCallback: (bounds) => LinearGradient(
-                        colors: const [
-                          Color(0xFF000080), // Dark blue
-                          Color(0xFF0000FF), // Blue
-                          Color(0xFF008000), // Green
-                          Color(0xFF006400), // Dark green
-                          Color(0xFFFF0000), // Red
-                          Color(0xFF8B0000), // Dark red
-                        ],
-                      ).createShader(bounds),
-                      child: Text(
-                        course.heading,
-                        style: GoogleFonts.outfit(
-                          fontSize: 16, // REDUCED from 18 to 16
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
+                SizedBox(width: 32),
+                // Content section
+                Expanded(
+                  flex: 3,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ShaderMask(
+                        shaderCallback: (bounds) => LinearGradient(
+                          colors: const [
+                            Color(0xFF000080), // Dark blue
+                            Color(0xFF0000FF), // Blue
+                            Color(0xFF008000), // Green
+                            Color(0xFF006400), // Dark green
+                            Color(0xFFFF0000), // Red
+                            Color(0xFF8B0000), // Dark red
+                          ],
+                        ).createShader(bounds),
+                        child: Text(
+                          course.heading,
+                          style: GoogleFonts.outfit(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
                         ),
-                        textAlign: TextAlign.center,
-                        maxLines: 2, // ADD THIS TO LIMIT LINES
-                        overflow: TextOverflow.ellipsis, // ADD THIS
                       ),
-                    ),
-                    SizedBox(height: 8), // REDUCED from 12 to 8
-                    Text(
-                      'what I learned :',
-                      style: GoogleFonts.outfit(
-                        fontSize: 14, // RESTORED to original size
-                        color: Color(0xFF333333),
-                        fontWeight: FontWeight.w500,
+                      SizedBox(height: 16),
+                      Text(
+                        'what I learned :',
+                        style: GoogleFonts.outfit(
+                          fontSize: 16,
+                          color: Color(0xFF333333),
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 6), // REDUCED from 8 to 6
-                    Text(
-                      course.description,
-                      style: GoogleFonts.outfit(
-                        fontSize: 12, // RESTORED to original size
-                        color: Color(0xFF333333),
-                        height: 1.5, // RESTORED to original line height
+                      SizedBox(height: 8),
+                      Text(
+                        course.description,
+                        style: GoogleFonts.outfit(
+                          fontSize: 14,
+                          color: Color(0xFF333333),
+                          height: 1.5,
+                        ),
                       ),
-                      textAlign: TextAlign.center,
-                      // REMOVED maxLines and overflow to allow full text display
-                    ),
-                  ],
+                      SizedBox(height: 20),
+                      ElevatedButton.icon(
+                        onPressed: () => _showCertificateDialog(context, course),
+                        icon: const Icon(Icons.workspace_premium_rounded, size: 22, color: Colors.white),
+                        label: Text(
+                          'View Certificate',
+                          style: GoogleFonts.outfit(
+                            fontWeight: FontWeight.w700,
+                            fontSize: 17,
+                            color: Colors.white,
+                          ),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFFFF7F50),
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          elevation: 4,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ],
+            )
+          : SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: Image.asset(
+                      course.imagePath,
+                      height: 150,
+                      width: double.infinity,
+                      fit: BoxFit.contain,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Container(
+                          height: 150,
+                          color: Colors.grey[300],
+                          child: Icon(
+                            Icons.image_not_supported,
+                            size: 40,
+                            color: Colors.grey[600],
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  SizedBox(height: 12),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      ShaderMask(
+                        shaderCallback: (bounds) => LinearGradient(
+                          colors: const [
+                            Color(0xFF000080), // Dark blue
+                            Color(0xFF0000FF), // Blue
+                            Color(0xFF008000), // Green
+                            Color(0xFF006400), // Dark green
+                            Color(0xFFFF0000), // Red
+                            Color(0xFF8B0000), // Dark red
+                          ],
+                        ).createShader(bounds),
+                        child: Text(
+                          course.heading,
+                          style: GoogleFonts.outfit(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                          textAlign: TextAlign.center,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      SizedBox(height: 8),
+                      Text(
+                        'what I learned :',
+                        style: GoogleFonts.outfit(
+                          fontSize: 14,
+                          color: Color(0xFF333333),
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      SizedBox(height: 6),
+                      Text(
+                        course.description,
+                        style: GoogleFonts.outfit(
+                          fontSize: 12,
+                          color: Color(0xFF333333),
+                          height: 1.5,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      SizedBox(height: 14),
+                      ElevatedButton.icon(
+                        onPressed: () => _showCertificateDialog(context, course),
+                        icon: const Icon(Icons.workspace_premium_rounded, size: 18, color: Colors.white),
+                        label: Text(
+                          'View Certificate',
+                          style: GoogleFonts.outfit(
+                            fontWeight: FontWeight.w700,
+                            fontSize: 15,
+                            color: Colors.white,
+                          ),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFFFF7F50),
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 18),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          elevation: 3,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ),
-    ),
-  );
-}
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -368,9 +534,8 @@ Course(
       padding: EdgeInsets.symmetric(vertical: 80, horizontal: 16),
       child: Column(
         children: [
-          // Course title
           Text(
-            'COURSE',
+            'CERTIFICATIONS',
             style: GoogleFonts.outfit(
               textStyle: TextStyle(
                 fontSize: isDesktop ? 48 : 32,
@@ -383,41 +548,106 @@ Course(
           ),
           SizedBox(height: 48),
           
-          // Course carousel
-          SizedBox(
-            height: isDesktop ? 300 : 400,
-            child: PageView.builder(
-              controller: _pageController,
-              onPageChanged: (int page) {
-                setState(() {
-                  _currentPage = page;
-                });
-              },
-              itemCount: courses.length,
-              itemBuilder: (context, index) {
-                return _buildCourseCard(courses[index], isDesktop);
-              },
-            ),
-          ),
-          
-          // Page indicators
-          SizedBox(height: 20),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: List.generate(
-              courses.length,
-              (index) => Container(
-                margin: EdgeInsets.symmetric(horizontal: 4),
-                width: _currentPage == index ? 12 : 8,
-                height: _currentPage == index ? 12 : 8,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: _currentPage == index 
-                    ? Color(0xFFFF7F50) 
-                    : Color(0xFFFF7F50).withOpacity(0.3),
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              if (isDesktop) ...[
+                _buildArrowButton(
+                  icon: Icons.chevron_left,
+                  onPressed: _currentPage > 0 ? () {
+                    _pageController.previousPage(
+                      duration: Duration(milliseconds: 300),
+                      curve: Curves.easeInOut,
+                    );
+                  } : null,
+                ),
+                SizedBox(width: 16),
+              ],
+              
+              Expanded(
+                child: SizedBox(
+                  height: isDesktop ? 340 : 460,
+                  child: PageView.builder(
+                    controller: _pageController,
+                    onPageChanged: (int page) {
+                      setState(() {
+                        _currentPage = page;
+                      });
+                    },
+                    itemCount: courses.length,
+                    itemBuilder: (context, index) {
+                      return _buildCourseCard(courses[index], isDesktop);
+                    },
+                  ),
                 ),
               ),
-            ),
+              
+              if (isDesktop) ...[
+                SizedBox(width: 16),
+                _buildArrowButton(
+                  icon: Icons.chevron_right,
+                  onPressed: _currentPage < courses.length - 1 ? () {
+                    _pageController.nextPage(
+                      duration: Duration(milliseconds: 300),
+                      curve: Curves.easeInOut,
+                    );
+                  } : null,
+                ),
+              ],
+            ],
+          ),
+          
+          SizedBox(height: 32),
+          
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              if (!isDesktop) ...[
+                _buildArrowButton(
+                  icon: Icons.chevron_left,
+                  onPressed: _currentPage > 0 ? () {
+                    _pageController.previousPage(
+                      duration: Duration(milliseconds: 300),
+                      curve: Curves.easeInOut,
+                    );
+                  } : null,
+                ),
+                SizedBox(width: 24),
+              ],
+              
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(
+                  courses.length,
+                  (index) => Container(
+                    margin: EdgeInsets.symmetric(horizontal: 4),
+                    width: _currentPage == index ? 12 : 8,
+                    height: _currentPage == index ? 12 : 8,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: _currentPage == index 
+                        ? Color(0xFFFF7F50) 
+                        : Color(0xFFFF7F50).withOpacity(0.3),
+                    ),
+                  ),
+                ),
+              ),
+              
+              if (!isDesktop) ...[
+                SizedBox(width: 24),
+                _buildArrowButton(
+                  icon: Icons.chevron_right,
+                  onPressed: _currentPage < courses.length - 1 ? () {
+                    _pageController.nextPage(
+                      duration: Duration(milliseconds: 300),
+                      curve: Curves.easeInOut,
+                    );
+                  } : null,
+                ),
+              ],
+            ],
           ),
         ],
       ),
@@ -430,6 +660,8 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -466,6 +698,7 @@ class _PortfolioPageState extends State<PortfolioPage> {
   final TextEditingController _messageController = TextEditingController();
   
   String activeSection = 'home';
+  bool _showAllProjects = false;
   
   // Global keys for sections
   final GlobalKey _aboutKey = GlobalKey();
@@ -484,62 +717,47 @@ void _launchURL(String url) async {
 }
 
 void _openResume(String url) {
-  // Open resume in a new tab using dart:html
-  html.window.open(url, '_blank');
+  // Force download the resume using an anchor element with the download attribute
+  final anchor = html.AnchorElement(href: url)
+    ..setAttribute('download', 'Dhananjay_Resume.pdf')
+    ..click();
 }
 
 
   final List<String> technologies = [
     'React', 'JavaScript (ES6+)', 'HTML5 & CSS3', 'Node.js',
-    'Git & GitHub', 'MongoDB', 'C programming', 'PHP', 'Java',
-    'Python', 'APIs (RESTful, MealDB)', 'Responsive Design', 'Agile Development'
+    'Git & GitHub', 'MongoDB','Firebase','MySQL','SQLite','PHP','Dart','Flutter','Visual Studio Code','C programming','Java',
+    'Python', 'APIs (RESTful, MealDB)','Next.js','Express.js','Responsive Design','Strapi CMS','Agile Development'
   ];
 
   final List<Project> projects = [
     Project(
-      title: 'ID CARD APP',
-      emoji: '🚀',
-      description: 'A clean and minimal digital ID card application built using Flutter. This project showcases a personal profile with a profile picture, name, role, and contact information.its a great starter project for mobile/web Flutter developers.The app is responsive and optimized for deployment on the web using Flutter web build.',
-      technologies: 'Flutter, Dart',
-      imagePath: 'assets/idcard.png',
-      demoUrl: 'https://college-id-card-ecru.vercel.app/',
-      codeUrl: 'https://github.com/dhanu-078/College-ID-Card',
-    ),
-    Project(
-      title: 'DELICIOUS RECIPES',
-      description: 'Delicious Recipes - A recipe website that helps users discover, search, and explore a variety of dishes from around the world. Features include smart search, detailed meal information, and easy-to-follow instructions for every level of cook.',
-      technologies: 'React, React Router, CSS, TheMealDB API, Vite, Git and GitHub, Deployment Platform : Vercel',
-      imagePath: 'assets/mealdb_app.png',
-      demoUrl: 'https://mealdb-recipe-app.vercel.app/',
-      codeUrl: 'https://github.com/dhanu-078/mealdb-recipe-app',
-    ),
-    Project(
-      title: 'TIC-TAC-TOE GAME',
-      description: 'Tic-Tac-Toe Game - A simple, interactive Tic-Tac-Toe game built using HTML, CSS, and JavaScript. Players take turns marking a 3x3 grid, aiming to get three marks in a row. The app tracks the game state, declares a winner, and allows for multiple rounds. It\'s a fun way to showcase my skills in building interactive web applications.',
-      technologies: 'HTML, CSS, JavaScript',
-      imagePath: 'assets/tic_tac_toe.png',
-      demoUrl: 'https://dhanu-078.github.io/tic-tac-toe/',
-      codeUrl: 'https://github.com/dhanu-078/tic-tac-toe',
-    ),
-    Project(
-      title: 'GROCERY SHOPPING WEBSITE',
-      description: 'An online platform for browsing and purchasing groceries with real-time cart, order history, and secure checkout. Optimized for both desktop and mobile users Features intuitive product search, category-based browsing, and a seamless checkout process.',
-      technologies: 'HTML, CSS, JavaScript, MySQL',
-      imagePath: 'assets/grocery_app.png',
-      codeUrl: 'https://github.com/dhanu-078/Groceroo-Grocery-Shopping-Website',
+      title: 'AI-POWERED CHICKEN WEIGHT ESTIMATION SYSTEM',
+      emoji: '🐔',
+      description: 'AI-based system designed to estimate the weight of chickens using image processing and machine learning techniques. The application analyzes visual input to predict weight accurately, reducing the need for manual weighing. Supports automated monitoring and data-driven decision-making to enhance productivity in poultry farming.',
+      technologies: 'Python, Machine Learning, Computer Vision, OpenCV, TensorFlow / PyTorch, NumPy, Pandas, Image Processing, GitHub',
+      imagePath: 'assets/chicken.png',
+      codeUrl: 'https://github.com/dhanu-078/AI-Powered-Chicken-Weight-Estimation-System',
     ),
     Project(
       title: 'REAL-TIME CHAT APPLICATION',
       emoji: '💬',
-      description: 'Developed a full-stack real-time chat application using React, Node.js, Express, and MongoDB, enabling live messaging with secure authentication. Implemented real-time communication and persistent data storage for user messages. Designed a responsive UI for smooth user experience across devices. Integrated WebSocket (Socket.IO) for instant message delivery and real-time updates.',
+      description: 'Developed a full-stack real-time chat application using React, Node.js, Express, and MongoDB, enabling live messaging with secure authentication. Implemented real-time communication and persistent data storage for user messages. Integrated WebSocket (Socket.IO) for instant message delivery and real-time updates.',
       technologies: 'React.js, Vite, HTML5, CSS3, JavaScript (ES6+), Node.js, Express.js, Socket.IO, MongoDB Atlas',
       imagePath: 'assets/chat_app.png',
       codeUrl: 'https://github.com/dhanu-078/chat-web-app',
     ),
     Project(
+      title: 'GROCERY SHOPPING WEBSITE',
+      description: 'An online platform for browsing and purchasing groceries with real-time cart, order history, and secure checkout. Optimized for both desktop and mobile users. Features intuitive product search, category-based browsing, and a seamless checkout process. Integrated secure user authentication and efficient order management for an enhanced shopping experience.',
+      technologies: 'HTML, CSS, JavaScript, MySQL',
+      imagePath: 'assets/grocery_app.png',
+      codeUrl: 'https://github.com/dhanu-078/Groceroo-Grocery-Shopping-Website',
+    ),
+    Project(
       title: 'FARMER TO STORE CROP SELLING APP',
       emoji: '💬',
-      description: 'A Flutter mobile application that connects farmers directly with stores to sell their harvested crops efficiently. The app provides an intuitive interface for listing, browsing, and purchasing agricultural produce, improving transparency and reducing intermediaries. Designed to empower farmers with direct market access and streamline crop trade processes.',
+      description: 'A Flutter mobile application that connects farmers directly with stores to sell their harvested crops efficiently. The app provides an intuitive interface for listing, browsing, and purchasing agricultural produce, improving transparency and reducing intermediaries. Designed to empower farmers with direct market access and crop trade processes.',
       technologies: 'Flutter, Dart, Firebase Authentication, Firebase Firestore Database, Firebase Storage',
       imagePath: 'assets/farmer_app.png',
       codeUrl: 'https://github.com/dhanu-078/Flutter-Farmer-to-Store-Crop-Selling-App-',
@@ -553,12 +771,36 @@ void _openResume(String url) {
       codeUrl: 'https://github.com/dhanu-078/vaccination-census-system',
     ),
     Project(
-      title: 'AI-POWERED CHICKEN WEIGHT ESTIMATION SYSTEM',
-      emoji: '🐔',
-      description: 'An AI-based system designed to estimate the weight of chickens using image processing and machine learning techniques. The application analyzes visual input to predict weight accurately, reducing the need for manual weighing. This system improves efficiency, reduces labor, and supports smart poultry farm management through automated data-driven analysis.',
-      technologies: 'Python, Machine Learning, Computer Vision, OpenCV, TensorFlow / PyTorch, NumPy, Pandas, Image Processing, GitHub',
-      imagePath: 'assets/chicken.png',
-      codeUrl: 'https://github.com/dhanu-078/AI-Powered-Chicken-Weight-Estimation-System',
+      title: 'DELICIOUS RECIPES',
+      description: 'Delicious Recipes – A recipe website that helps users discover, search, and explore a variety of dishes from around the world. Features include smart search, detailed meal information, and easy-to-follow instructions for every level of cook. Provides a responsive and intuitive interface, allowing users to quickly find recipes based on ingredients, categories, or cuisine.',
+      technologies: 'React, React Router, CSS, TheMealDB API, Vite, Git and GitHub, Deployment Platform : Vercel',
+      imagePath: 'assets/mealdb_app.png',
+      demoUrl: 'https://mealdb-recipe-app.vercel.app/',
+      codeUrl: 'https://github.com/dhanu-078/mealdb-recipe-app',
+    ),
+    Project(
+      title: 'MAYONIX INNOVATIONS',
+      description: 'Mayonix Innovations – A modern, AI-focused corporate website showcasing the company’s services, portfolio, blogs, and career opportunities. Contributed to implementing multilingual localization, SEO enhancements, CMS integration, responsive UI improvements, dynamic blog management, and performance optimizations to deliver a scalable and user-friendly web experience.',
+      technologies:  'Next.js, React.js, TypeScript, Strapi CMS, Node.js, PostgreSQL, SQLite, Redis, Tailwind CSS, HTML5, CSS3, REST APIs, Cloudflare Turnstile, Cloudinary, Brevo',
+      imagePath: 'assets/mayonix.png',
+      demoUrl: 'https://www.mayonix.com/',
+),
+    Project(
+      title: 'ID CARD APP',
+      emoji: '🚀',
+      description: 'A clean and minimal digital ID card application built using Flutter. This project showcases a personal profile with a profile picture, name, role, and contact information.its a great starter project for mobile/web Flutter developers.The app is responsive and optimized for deployment on the web using Flutter web build.',
+      technologies: 'Flutter, Dart',
+      imagePath: 'assets/idcard.png',
+      demoUrl: 'https://college-id-card-ecru.vercel.app/',
+      codeUrl: 'https://github.com/dhanu-078/College-ID-Card',
+    ),
+    Project(
+      title: 'TIC-TAC-TOE GAME',
+      description: 'Tic-Tac-Toe Game - A simple, interactive Tic-Tac-Toe game built using HTML, CSS, and JavaScript. Players take turns marking a 3x3 grid, aiming to get three marks in a row. The app tracks the game state, declares a winner, and allows for multiple rounds. It\'s a fun way to showcase my skills in building interactive web applications.',
+      technologies: 'HTML, CSS, JavaScript',
+      imagePath: 'assets/tic_tac_toe.png',
+      demoUrl: 'https://dhanu-078.github.io/tic-tac-toe/',
+      codeUrl: 'https://github.com/dhanu-078/tic-tac-toe',
     ),
     Project(
       title: 'FLUTTER COUNTER APPLICATION',
@@ -652,6 +894,7 @@ Widget _buildProjectCard(Project project) {
         ),
         padding: EdgeInsets.all(1.5), // Gradient border
         child: Container(
+          height: 600, // Fixed height to make all cards equal size
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(10),
@@ -675,6 +918,8 @@ Widget _buildProjectCard(Project project) {
                     height: 180,
                     width: double.infinity,
                     fit: BoxFit.cover,
+                    filterQuality: FilterQuality.high,
+                    isAntiAlias: true,
                   ),
                 ),
               SizedBox(height: 20),
@@ -688,36 +933,45 @@ Widget _buildProjectCard(Project project) {
                 textAlign: TextAlign.center,
               ),
               SizedBox(height: 12),
-              Text(
-                project.description,
-                style: GoogleFonts.outfit(
-                  fontSize: 14,
-                  color: Color(0xFF333333),
-                  height: 1.5,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(height: 12),
-              RichText(
-                textAlign: TextAlign.center,
-                text: TextSpan(
-                  children: [
-                    TextSpan(
-                      text: 'Technologies used: ',
-                      style: GoogleFonts.outfit(
-                        fontSize: 12,
-                        color: Colors.grey[700],
-                        fontWeight: FontWeight.bold,
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Text(
+                        project.description,
+                        style: GoogleFonts.outfit(
+                          fontSize: 14,
+                          color: Color(0xFF333333),
+                          height: 1.5,
+                        ),
+                        textAlign: TextAlign.center,
                       ),
-                    ),
-                    TextSpan(
-                      text: project.technologies,
-                      style: GoogleFonts.outfit(
-                        fontSize: 12,
-                        color: Colors.grey[700],
+                      SizedBox(height: 12),
+                      RichText(
+                        textAlign: TextAlign.center,
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text: 'Technologies used: ',
+                              style: GoogleFonts.outfit(
+                                fontSize: 12,
+                                color: Colors.grey[800],
+                                fontWeight: FontWeight.bold, // Bold label
+                              ),
+                            ),
+                            TextSpan(
+                              text: project.technologies,
+                              style: GoogleFonts.outfit(
+                                fontSize: 12,
+                                color: Color(0xFFFF7F50), // Main coral/orange accent color
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
               SizedBox(height: 16),
@@ -1048,36 +1302,31 @@ SliverToBoxAdapter(
                         ),
                       ),
 
-                      // Right Side: Image with Gradient Circle
+                      // Right Side: Squircle Image with Animated Gradient Border
                       Container(
                         width: 280,
                         height: 280,
+                        margin: const EdgeInsets.only(left: 32, top: 40),
                         decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          gradient: LinearGradient(
-                            colors: [
-                              Color(0xFF8B5CF6),
-                              Color(0xFF6366F1),
-                              Color(0xFFEC4899),
-                            ],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                          ),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black12,
-                              blurRadius: 16,
-                              offset: Offset(0, 8),
+                              color: Colors.black.withOpacity(0.08),
+                              blurRadius: 20,
+                              offset: Offset(0, 10),
                             ),
                           ],
                         ),
-                        padding: EdgeInsets.all(6),
-                        child: ClipOval(
-                          child: Image.asset(
-                            'assets/profile.png', // ✅ Make sure this path is correct
-                            fit: BoxFit.cover,
-                            width: 280,
-                            height: 280,
+                        child: AnimatedGradientBorder(
+                          borderWidth: 4.0,
+                          borderRadius: BorderRadius.circular(24),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: Image.asset(
+                              'assets/profile.png', // ✅ Make sure this path is correct
+                              fit: BoxFit.cover,
+                              width: 280,
+                              height: 280,
+                            ),
                           ),
                         ),
                       ),
@@ -1097,35 +1346,31 @@ SliverToBoxAdapter(
                       ),
                       SizedBox(height: 32),
                       Container(
-  width: 200,
-  height: 200,
-  decoration: BoxDecoration(
-    shape: BoxShape.circle,
-    gradient: LinearGradient(
-      colors: [
-        Color(0xFF8B5CF6),
-        Color(0xFF6366F1),
-        Color(0xFFEC4899),
-      ],
-      begin: Alignment.topLeft,
-      end: Alignment.bottomRight,
-    ),
-    boxShadow: [
-      BoxShadow(
-        color: Colors.black12,
-        blurRadius: 12,
-        offset: Offset(0, 6),
-      ),
-    ],
-  ),
-  padding: EdgeInsets.all(5),
-  child: ClipOval(
-    child: Image.asset(
-      'assets/profile.png',
-      fit: BoxFit.cover,
-    ),
-  ),
-),
+                        width: 200,
+                        height: 200,
+                        decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.06),
+                              blurRadius: 15,
+                              offset: Offset(0, 8),
+                            ),
+                          ],
+                        ),
+                        child: AnimatedGradientBorder(
+                          borderWidth: 3.5,
+                          borderRadius: BorderRadius.circular(20),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(16.5),
+                            child: Image.asset(
+                              'assets/profile.png',
+                              fit: BoxFit.cover,
+                              width: 200,
+                              height: 200,
+                            ),
+                          ),
+                        ),
+                      ),
 
                       SizedBox(height: 32),
                       Text(
@@ -1202,7 +1447,7 @@ SliverToBoxAdapter(
       child: Column(
         children: [
           Text(
-            'Projects',
+            'PROJECTS',
             style: GoogleFonts.outfit(
               textStyle: TextStyle(
                 fontSize: MediaQuery.of(context).size.width > 768 ? 36 : 28,
@@ -1214,13 +1459,44 @@ SliverToBoxAdapter(
             textAlign: TextAlign.center,
           ),
           SizedBox(height: 48),
-          Wrap(
-            spacing: 20,
-            runSpacing: 20,
-            alignment: WrapAlignment.center,
-            children: projects.map((project) {
-              return _buildProjectCard(project);
-            }).toList(),
+          AnimatedSize(
+            duration: const Duration(milliseconds: 350),
+            curve: Curves.easeInOut,
+            child: Wrap(
+              spacing: 20,
+              runSpacing: 20,
+              alignment: WrapAlignment.center,
+              children: (_showAllProjects ? projects : projects.sublist(0, 7)).map((project) {
+                return _buildProjectCard(project);
+              }).toList(),
+            ),
+          ),
+          SizedBox(height: 40),
+          OutlinedButton.icon(
+            onPressed: () {
+              setState(() {
+                _showAllProjects = !_showAllProjects;
+              });
+            },
+            icon: Icon(
+              _showAllProjects ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
+              color: Color(0xFFFF7F50),
+            ),
+            label: Text(
+              _showAllProjects ? 'Show Less' : 'More Projects',
+              style: GoogleFonts.outfit(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFFFF7F50),
+              ),
+            ),
+            style: OutlinedButton.styleFrom(
+              side: BorderSide(color: Color(0xFFFF7F50), width: 2),
+              padding: EdgeInsets.symmetric(horizontal: 28, vertical: 14),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30),
+              ),
+            ),
           ),
         ],
       ),
@@ -1304,6 +1580,7 @@ SliverToBoxAdapter(
                 items: [
                   _linkButton('About Me', _aboutKey, 'about'),
                   _linkButton('Projects', _projectsKey, 'projects'),
+                  _linkButton('Certificates', _courseKey, 'course'),
                   _linkButton('Contact', _contactKey, 'contact'),
                   TextButton(
                     onPressed: () => _openResume('/resume.pdf'),
@@ -1331,7 +1608,7 @@ SliverToBoxAdapter(
                 items: [
                   _socialIcon(FontAwesomeIcons.github, 'https://github.com/dhanu-078'),
                   _socialIcon(FontAwesomeIcons.linkedin, 'https://www.linkedin.com/in/dhananjayak2024/'),
-                  _socialIcon(FontAwesomeIcons.twitter, 'https://twitter.com'),
+                  _socialIcon(FontAwesomeIcons.instagram, 'https://www.instagram.com/dhhananjay_/?hl=en'),
                   _socialIcon(FontAwesomeIcons.envelope, 'mailto:dhananjaydhanu2004@gmail.com'),
                 ],
                 isIcons: true,
@@ -1423,6 +1700,8 @@ SliverToBoxAdapter(
                             SizedBox(width: 32),
                             _buildNavButton('Projects', 'projects', _projectsKey, Icons.work),
                             SizedBox(width: 32),
+                            _buildNavButton('Certificates', 'course', _courseKey, Icons.workspace_premium_rounded),
+                            SizedBox(width: 32),
                             _buildNavButton('Contact', 'contact', _contactKey, Icons.contact_mail),
                           ],
                         )
@@ -1461,6 +1740,7 @@ SliverToBoxAdapter(
             _buildDrawerItem('About', 'about', _aboutKey, Icons.info),
             _buildDrawerItem('Skills', 'skills', _skillsKey, Icons.code),
             _buildDrawerItem('Projects', 'projects', _projectsKey, Icons.work),
+            _buildDrawerItem('Certificates', 'course', _courseKey, Icons.workspace_premium_rounded),
             _buildDrawerItem('Contact', 'contact', _contactKey, Icons.contact_mail),
           ],
         ),
