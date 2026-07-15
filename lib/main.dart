@@ -786,6 +786,13 @@ void _openResume(String url) {
       demoUrl: 'https://www.mayonix.com/',
 ),
     Project(
+      title: 'COMPANYOS',
+      description: 'CompanyOS – A full-stack organizational management platform designed to streamline internship lifecycle, team collaboration, expense tracking, and attendance management. Features include Google OAuth authentication, role-based access control, real-time dashboards, intern management, standup tracking, expense monitoring, and calendar-based leave management through an intuitive and responsive interface.',
+      technologies: 'React.js, Node.js, Express.js, MongoDB, Google OAuth, REST APIs, Google Apps Script, CSS, Git & GitHub, Render',
+      imagePath: 'assets/companyos.png',
+      demoUrl: 'https://mayonix-intranet-2.onrender.com/',
+    ),
+    Project(
       title: 'ID CARD APP',
       emoji: '🚀',
       description: 'A clean and minimal digital ID card application built using Flutter. This project showcases a personal profile with a profile picture, name, role, and contact information.its a great starter project for mobile/web Flutter developers.The app is responsive and optimized for deployment on the web using Flutter web build.',
@@ -1466,7 +1473,7 @@ SliverToBoxAdapter(
               spacing: 20,
               runSpacing: 20,
               alignment: WrapAlignment.center,
-              children: (_showAllProjects ? projects : projects.sublist(0, 7)).map((project) {
+              children: (_showAllProjects ? projects : projects.sublist(0, 8)).map((project) {
                 return _buildProjectCard(project);
               }).toList(),
             ),
