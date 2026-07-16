@@ -135,7 +135,7 @@ class _CourseSectionState extends State<CourseSection> {
     Course(
     imagePath: 'assets/mayonix_internship.jpg',
   heading: 'Junior Software Engineer Internship',
-  description: 'Completed a software development internship at Mayonix Innovations, contributing to CompanyOS using modern web technologies and collaborative development practices.',
+  description: 'Completed a software development internship at Mayonix Innovations, contributing to the corporate website and CompanyOS by developing features, integrating APIs, enhancing UI, and working with modern full-stack web technologies.',
    ),
     Course(
   imagePath: 'assets/accolade_internship.jpg',
