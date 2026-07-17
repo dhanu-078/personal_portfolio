@@ -655,6 +655,272 @@ class _CourseSectionState extends State<CourseSection> {
   }
 }
 
+class EducationItem {
+  final String degree;
+  final String institution;
+  final String duration;
+  final String grade;
+  final String description;
+
+  EducationItem({
+    required this.degree,
+    required this.institution,
+    required this.duration,
+    required this.grade,
+    required this.description,
+  });
+}
+
+final List<EducationItem> educationList = [
+  EducationItem(
+    degree: 'Master of Computer Applications (MCA)',
+    institution: 'NMAM Institute of Technology, Nitte',
+    duration: '2024 – 2026',
+    grade: 'CGPA: 8.29 / 10',
+    description: 'Specialized in advanced software development, full-stack web technologies, databases, and software engineering.',
+  ),
+  EducationItem(
+    degree: 'Bachelor of Computer Applications (BCA)',
+    institution: 'Canara College, Mangalore (Affiliated to Mangalore University)',
+    duration: '2021 – 2024',
+    grade: 'Percentage: 79.45%',
+    description: 'Built a strong foundation in programming, database management systems, object-oriented programming, web development, and software engineering.',
+  ),
+  EducationItem(
+    degree: 'Pre-University Course (PUC)',
+    institution: 'Besant National Pre-University College, Mangalore\nDepartment of Pre-University Education, Karnataka',
+    duration: '2019 – 2021',
+    grade: 'Percentage: 80.16%',
+    description: 'Completed the Pre-University Course with a focus on academic fundamentals and analytical skills.',
+  ),
+  EducationItem(
+    degree: 'Secondary School Leaving Certificate (SSLC)',
+    institution: 'Sharada Ganapathi Vidyakendra\nKarnataka Secondary Education Examination Board (KSEEB)',
+    duration: '2018 – 2019',
+    grade: 'Percentage: 76.64%',
+    description: 'Completed secondary education with a strong academic foundation.',
+  ),
+];
+
+class EducationCard extends StatefulWidget {
+  final EducationItem item;
+  final bool isDesktop;
+
+  const EducationCard({Key? key, required this.item, required this.isDesktop}) : super(key: key);
+
+  @override
+  _EducationCardState createState() => _EducationCardState();
+}
+
+class _EducationCardState extends State<EducationCard> {
+  bool _isHovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      onEnter: (_) => setState(() => _isHovered = true),
+      onExit: (_) => setState(() => _isHovered = false),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        transform: Matrix4.identity()..translate(_isHovered ? 8.0 : 0.0, 0.0),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: _isHovered 
+                  ? Colors.black.withOpacity(0.08) 
+                  : Colors.black.withOpacity(0.03),
+              blurRadius: _isHovered ? 24 : 12,
+              offset: _isHovered ? const Offset(0, 12) : const Offset(0, 4),
+            ),
+          ],
+          border: Border.all(
+            color: _isHovered ? const Color(0xFFFF7F50) : Colors.grey.shade200,
+            width: 1.5,
+          ),
+        ),
+        padding: EdgeInsets.all(widget.isDesktop ? 24 : 16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: Text(
+                    widget.item.degree,
+                    style: GoogleFonts.outfit(
+                      fontSize: widget.isDesktop ? 20 : 16,
+                      fontWeight: FontWeight.bold,
+                      color: const Color(0xFF1F2937),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFFF7F50).withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Text(
+                    widget.item.duration,
+                    style: GoogleFonts.outfit(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: const Color(0xFFFF7F50),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            Text(
+              widget.item.institution,
+              style: GoogleFonts.outfit(
+                fontSize: widget.isDesktop ? 16 : 14,
+                fontWeight: FontWeight.w500,
+                color: Colors.grey.shade700,
+              ),
+            ),
+            const SizedBox(height: 12),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+              decoration: BoxDecoration(
+                color: const Color(0xFF20C997).withOpacity(0.1),
+                borderRadius: BorderRadius.circular(6),
+              ),
+              child: Text(
+                widget.item.grade,
+                style: GoogleFonts.outfit(
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                  color: const Color(0xFF20C997),
+                ),
+              ),
+            ),
+            const SizedBox(height: 12),
+            Text(
+              widget.item.description,
+              style: GoogleFonts.outfit(
+                fontSize: widget.isDesktop ? 14 : 13,
+                color: Colors.grey.shade600,
+                height: 1.5,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class EducationSection extends StatelessWidget {
+  final GlobalKey? headingKey;
+
+  const EducationSection({Key? key, this.headingKey}) : super(key: key);
+
+  Widget _buildTimelineItem(EducationItem item, bool isLast, bool isDesktop) {
+    return IntrinsicHeight(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Column(
+            children: [
+              Container(
+                width: isDesktop ? 44 : 36,
+                height: isDesktop ? 44 : 36,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: const Color(0xFFFF7F50),
+                    width: 3,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color(0xFFFF7F50).withOpacity(0.2),
+                      blurRadius: 8,
+                      spreadRadius: 2,
+                    ),
+                  ],
+                ),
+                child: Icon(
+                  Icons.school_rounded,
+                  size: isDesktop ? 20 : 16,
+                  color: const Color(0xFFFF7F50),
+                ),
+              ),
+              if (!isLast)
+                Expanded(
+                  child: Container(
+                    width: 3,
+                    color: const Color(0xFFFF7F50).withOpacity(0.3),
+                  ),
+                ),
+            ],
+          ),
+          SizedBox(width: isDesktop ? 24 : 12),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 24.0),
+              child: EducationCard(item: item, isDesktop: isDesktop),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    bool isDesktop = MediaQuery.of(context).size.width > 768;
+
+    return Container(
+      color: Colors.white,
+      padding: EdgeInsets.only(top: 40, bottom: 80, left: 16, right: 16),
+      child: Center(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(maxWidth: 1024),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              KeyedSubtree(
+                key: headingKey,
+                child: Text(
+                  'EDUCATION',
+                  style: GoogleFonts.outfit(
+                    fontSize: isDesktop ? 48 : 32,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFFFF7F50),
+                    letterSpacing: 2.0,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              SizedBox(height: 48),
+              ListView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: educationList.length,
+                itemBuilder: (context, index) {
+                  return _buildTimelineItem(
+                    educationList[index],
+                    index == educationList.length - 1,
+                    isDesktop,
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 void main() {
   runApp(MyApp());
 }
@@ -702,6 +968,7 @@ class _PortfolioPageState extends State<PortfolioPage> {
   
   // Global keys for sections
   final GlobalKey _aboutKey = GlobalKey();
+  final GlobalKey _educationKey = GlobalKey();
   final GlobalKey _skillsKey = GlobalKey();
   final GlobalKey _projectsKey = GlobalKey();
   final GlobalKey _contactKey = GlobalKey();
@@ -727,14 +994,14 @@ void _openResume(String url) {
   final List<String> technologies = [
     'React', 'JavaScript (ES6+)', 'HTML5 & CSS3', 'Node.js',
     'Git & GitHub', 'MongoDB','Firebase','MySQL','SQLite','PHP','Dart','Flutter','Visual Studio Code','C programming','Java',
-    'Python', 'APIs (RESTful, MealDB)','Next.js','Express.js','Responsive Design','Strapi CMS','Agile Development'
+    'Python', 'APIs (RESTful, MealDB)','Next.js','Express.js','Responsive Design','Strapi CMS','Agile Development','TypeScript', 'Tailwind CSS', 'PostgreSQL', 'Prisma ORM', 'Redis', 'Socket.IO', 'Vite', 'Chart.js', 'Bootstrap', 'MongoDB Atlas', 'Firebase Authentication', 'Firebase Firestore', 'Cloudinary', 'Vercel', 'Render', 'Google OAuth', 'OpenCV', 'TensorFlow', 'PyTorch', 'NumPy', 'Pandas'
   ];
 
   final List<Project> projects = [
     Project(
       title: 'AI-POWERED CHICKEN WEIGHT ESTIMATION SYSTEM',
       emoji: '🐔',
-      description: 'AI-based system designed to estimate the weight of chickens using image processing and machine learning techniques. The application analyzes visual input to predict weight accurately, reducing the need for manual weighing. Supports automated monitoring and data-driven decision-making to enhance productivity in poultry farming.',
+      description: 'AI-based system designed to estimate the weight of chickens using image processing and machine learning techniques. The application analyzes visual input to predict weight, reducing the need for manual weighing. Supports automated monitoring and data-driven decision-making to enhance productivity in poultry farming.',
       technologies: 'Python, Machine Learning, Computer Vision, OpenCV, TensorFlow / PyTorch, NumPy, Pandas, Image Processing, GitHub',
       imagePath: 'assets/chicken.png',
       codeUrl: 'https://github.com/dhanu-078/AI-Powered-Chicken-Weight-Estimation-System',
@@ -1263,10 +1530,10 @@ Widget _buildContactForm() {
               
 // About Section
 SliverToBoxAdapter(
-  key: _aboutKey,
   child: Container(
+    key: _aboutKey,
     color: Color(0xFFF9FAFB),
-    padding: EdgeInsets.symmetric(vertical: 80, horizontal: 16),
+    padding: EdgeInsets.only(top: 80, bottom: 40, left: 16, right: 16),
     child: LayoutBuilder(
       builder: (context, constraints) {
         bool isDesktop = constraints.maxWidth > 768;
@@ -1297,7 +1564,7 @@ SliverToBoxAdapter(
                               ),
                               SizedBox(height: 24),
                               Text(
-                                "Hello, I'm Dhananjaya k, a passionate web developer with a keen eye for detail and a love for creating seamless user experiences. I specialize in building modern, responsive websites using the latest web technologies such as React, JavaScript, HTML5, and CSS3.\n\nMy goal is to craft fast, beautiful, and interactive applications that solve real-world problems. With a focus on front-end development, I work closely with clients and teams to deliver high-quality projects that exceed expectations. I’m constantly expanding my knowledge and love staying up-to-date with new tools and frameworks in the web development ecosystem.",
+                                "Welcome to my portfolio! Here, you'll find my education, technical skills, certifications, and a collection of projects that showcase my passion for web and software development. I am a Full-Stack Web Developer who enjoys building modern, responsive, and user-friendly web applications using React.js, Next.js, Node.js, Express.js, and MySQL. Thank you for visiting, and feel free to reach out!",
                                 style: GoogleFonts.outfit(
                                   fontSize: 16,
                                   color: Colors.black87,
@@ -1381,7 +1648,7 @@ SliverToBoxAdapter(
 
                       SizedBox(height: 32),
                       Text(
-                        "Hello, I'm Dhananjaya k, a passionate web developer with a keen eye for detail and a love for creating seamless user experiences. I specialize in building modern, responsive websites using the latest web technologies such as React, JavaScript, HTML5, and CSS3.\n\nMy goal is to craft fast, beautiful, and interactive applications that solve real-world problems. With a focus on front-end development, I work closely with clients and teams to deliver high-quality projects that exceed expectations. I’m constantly expanding my knowledge and love staying up-to-date with new tools and frameworks in the web development ecosystem.",
+                        "Welcome to my portfolio! Here, you'll find my education, technical skills, certifications, and a collection of projects that showcase my passion for web and software development. I am a Full-Stack Web Developer who enjoys building modern, responsive, and user-friendly web applications using React.js, Next.js, Node.js, Express.js, and MySQL. Thank you for visiting, and feel free to reach out!",
                         style: GoogleFonts.outfit(
                           fontSize: 14,
                           color: Colors.black87,
@@ -1398,11 +1665,16 @@ SliverToBoxAdapter(
   ),
 ),
 
+// Education Section
+SliverToBoxAdapter(
+  child: EducationSection(headingKey: _educationKey),
+),
+
               // Skills Section
               SliverToBoxAdapter(
                 child: Container(
                   key: _skillsKey,
-                  color: Colors.white,
+                  color: Color(0xFFF9FAFB),
                   padding: EdgeInsets.symmetric(vertical: 80, horizontal: 16),
                   child: ConstrainedBox(
                     constraints: BoxConstraints(maxWidth: 1024),
@@ -1585,7 +1857,8 @@ SliverToBoxAdapter(
               _footerSection(
                 title: 'Quick Links',
                 items: [
-                  _linkButton('About Me', _aboutKey, 'about'),
+                  _linkButton('Home', _aboutKey, 'about'),
+                  _linkButton('Education', _educationKey, 'education'),
                   _linkButton('Projects', _projectsKey, 'projects'),
                   _linkButton('Certificates', _courseKey, 'course'),
                   _linkButton('Contact', _contactKey, 'contact'),
@@ -1701,7 +1974,9 @@ SliverToBoxAdapter(
                       if (MediaQuery.of(context).size.width > 768)
                         Row(
                           children: [
-                            _buildNavButton('About', 'about', _aboutKey, Icons.info),
+                            _buildNavButton('Home', 'about', _aboutKey, Icons.home_rounded),
+                            SizedBox(width: 32),
+                            _buildNavButton('Education', 'education', _educationKey, Icons.school),
                             SizedBox(width: 32),
                             _buildNavButton('Skills', 'skills', _skillsKey, Icons.code),
                             SizedBox(width: 32),
@@ -1744,7 +2019,8 @@ SliverToBoxAdapter(
                 ),
               ),
             ),
-            _buildDrawerItem('About', 'about', _aboutKey, Icons.info),
+            _buildDrawerItem('Home', 'about', _aboutKey, Icons.home_rounded),
+            _buildDrawerItem('Education', 'education', _educationKey, Icons.school),
             _buildDrawerItem('Skills', 'skills', _skillsKey, Icons.code),
             _buildDrawerItem('Projects', 'projects', _projectsKey, Icons.work),
             _buildDrawerItem('Certificates', 'course', _courseKey, Icons.workspace_premium_rounded),
@@ -1787,7 +2063,8 @@ label: Text(
       children: [
         Text('QUICK LINKS', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white)),
         SizedBox(height: 16),
-        _buildLinkButton('About Me', _aboutKey, 'about'),
+        _buildLinkButton('Home', _aboutKey, 'about'),
+        _buildLinkButton('Education', _educationKey, 'education'),
         _buildLinkButton('Projects', _projectsKey, 'projects'),
         _buildLinkButton('Contact', _contactKey, 'contact'),
         TextButton(
